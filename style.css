@@ -1,0 +1,114 @@
+/* Custom styles for Hybrid Cloud Storage Sync Dashboard */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --aws-orange: #ff9900;
+  --aws-squid-ink: #232f3e;
+  --aws-dark-blue: #131a22;
+  --aws-light-blue: #0073bb;
+  --aws-accent-blue: #0972d3;
+  --aws-green: #1d8102;
+  --aws-red: #d13212;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0d1117;
+  color: #e6edf3;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #161b22;
+}
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* Glowing effects */
+.glow-orange {
+  box-shadow: 0 0 15px rgba(255, 153, 0, 0.25);
+}
+
+.glow-blue {
+  box-shadow: 0 0 15px rgba(9, 114, 211, 0.25);
+}
+
+.glow-green {
+  box-shadow: 0 0 15px rgba(29, 129, 2, 0.25);
+}
+
+/* Pulsing sync indicator */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.pulse-sync {
+  animation: pulse-ring 2s infinite ease-in-out;
+}
+
+/* Flow animation */
+@keyframes flow-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.flow-packet {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ff9900;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff9900;
+}
+
+/* Custom Range Input */
+input[type="range"] {
+  accent-color: #ff9900;
+}
+
+/* Gradient borders */
+.aws-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  transition: all 0.2s ease-in-out;
+}
+.aws-card:hover {
+  border-color: #484f58;
+}
+
+/* Badge styles */
+.badge-standard {
+  background: rgba(9, 114, 211, 0.15);
+  color: #58a6ff;
+  border: 1px solid rgba(9, 114, 211, 0.3);
+}
+.badge-intelligent {
+  background: rgba(163, 113, 247, 0.15);
+  color: #bc8cff;
+  border: 1px solid rgba(163, 113, 247, 0.3);
+}
+.badge-ia {
+  background: rgba(210, 153, 34, 0.15);
+  color: #e3b341;
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+.badge-glacier {
+  background: rgba(56, 139, 253, 0.15);
+  color: #79c0ff;
+  border: 1px solid rgba(56, 139, 253, 0.3);
+}
