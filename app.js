@@ -1,6 +1,6 @@
 // Hybrid Cloud Storage Sync Using AWS Storage Gateway
 // Capstone Project Interactive Simulator for EPCET CSE
-// Student: Sanmati M Kulkarni (USN: 1EP24CS132) | Course: 24CS562
+// Student: Satyam Kumar (USN: 1EP24CS134) | Course: 24CS562
 
 const S3_BUCKET_NAME = "s3://epcet-hybrid-storage-vault/";
 const GATEWAY_IP = "192.168.1.100";
@@ -31,7 +31,7 @@ let state = {
       versionsList: ['v2.1 (Current)', 'v1.0 (Initial Draft)'],
       lastModified: '2026-11-20 14:22:10 UTC',
       encryption: 'aws:kms (mrk-7c89f81a)',
-      content: 'East Point College of Engineering & Technology. Department of Computer Science & Engineering. Capstone Project: Hybrid Cloud Storage Sync Using AWS Storage Gateway. Student: Sanmati M Kulkarni (USN: 1EP24CS132). Instructor: Mrs. Triveni N. HOD: Dr. I. Manimozhi.',
+      content: 'East Point College of Engineering & Technology. Department of Computer Science & Engineering. Capstone Project: Hybrid Cloud Storage Sync Using AWS Storage Gateway. Student: Satyam Kumar (USN: 1EP24CS134). Instructor: Mrs. Triveni N. HOD: Dr. I. Manimozhi.',
       isDeleteMarker: false
     },
     {
@@ -144,7 +144,7 @@ let state = {
       timestamp: '2026-11-20 20:41:00 UTC',
       eventName: 'RefreshCache',
       service: 'storagegateway.amazonaws.com',
-      identity: 'AdminUser/SanmatiKulkarni',
+      identity: 'AdminUser/SatyamKumar',
       resource: 'share-epcet-vault-nfs',
       status: '200 OK'
     }
@@ -525,10 +525,10 @@ function simulateTimeAdvance(days) {
 
 // Sample file loader helper
 function loadSampleFile() {
-  document.getElementById('inputFileName').value = 'student_marks_transcript_sanmati.pdf';
+  document.getElementById('inputFileName').value = 'student_marks_transcript_satyam.pdf';
   document.getElementById('inputFileCategory').value = 'doc';
   document.getElementById('inputFileSize').value = '2.4 MB';
-  document.getElementById('inputFileContent').value = 'East Point College of Engineering & Technology. Department of CSE. Student: Sanmati M Kulkarni (USN: 1EP24CS132). Course: 24CS562 Capstone Project. Internal Marks: 40/40. Aadhaar: 9876-5432-1098. Contact: sanmati@epcet.edu.in.';
+  document.getElementById('inputFileContent').value = 'East Point College of Engineering & Technology. Department of CSE. Student: Satyam Kumar (USN: 1EP24CS134). Course: 24CS562 Capstone Project. Internal Marks: 40/40. Aadhaar: 9876-5432-1098. Contact: satyam@epcet.edu.in.';
 }
 
 // Amazon Macie Scanner
@@ -565,7 +565,7 @@ function runMacieScan() {
       findings.push({ type: 'Tax ID / PAN Number', value: 'Found Indian Permanent Account Number (PAN)', risk: 'HIGH' });
       severity = 'HIGH';
     }
-    if (/sanmati|1EP24CS132|student/i.test(content)) {
+    if (/satyam|1EP24CS134|student/i.test(content)) {
       findings.push({ type: 'Student Personally Identifiable Information (PII)', value: 'College USN and student identification detected', risk: 'MEDIUM' });
     }
 
@@ -643,7 +643,7 @@ function runTextractOCR() {
         <div class="bg-[#161b22] p-2.5 rounded border border-[#30363d] space-y-1 font-mono text-[11px] text-slate-300 max-h-40 overflow-y-auto">
           ${lines.map(line => `<div class="p-1 hover:bg-[#21262d] rounded flex items-start space-x-2"><span class="text-cyan-500 font-bold">&gt;</span><span>${line}</span></div>`).join('')}
         </div>
-        <div class="text-[10px] text-slate-400">Structured Key-Values: <span class="text-emerald-400 mono font-bold">Institution: EPCET | Student: Sanmati M Kulkarni | USN: 1EP24CS132</span></div>
+        <div class="text-[10px] text-slate-400">Structured Key-Values: <span class="text-emerald-400 mono font-bold">Institution: EPCET | Student: Satyam Kumar | USN: 1EP24CS134</span></div>
       </div>
     `;
 

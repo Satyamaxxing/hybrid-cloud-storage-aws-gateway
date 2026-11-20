@@ -18,8 +18,8 @@
 
 | Field | Details |
 |---|---|
-| **Student Name** | Sanmati M Kulkarni |
-| **University Seat Number (USN)** | 1EP24CS132 |
+| **Student Name** | Satyam Kumar |
+| **University Seat Number (USN)** | 1EP24CS134 |
 | **Section & Semester** | Section C, V Semester |
 | **Course Code & Title** | 24CS562 – AI Cloud Practitioner Capstone |
 | **Faculty Guide** | Mrs. Triveni N (Assistant Professor, Dept. of CSE) |
@@ -139,4 +139,4 @@ Using **AWS Storage Gateway** in its **Amazon S3 File Gateway** deployment (host
 
 ## 📜 Academic Declaration
 
-This project titled **"Hybrid Cloud Storage Sync Using AWS Storage Gateway"** was designed and implemented by **Sanmati M Kulkarni** (USN: `1EP24CS132`), under the guidance of **Mrs. Triveni N** (Assistant Professor) and **Dr. I. Manimozhi** (HOD, Computer Science & Engineering), **East Point College of Engineering & Technology**, Bangalore, for the partial fulfillment of the requirements for the **V Semester B.E. Degree** in Computer Science & Engineering during the academic year 2026–27.
+This project titled **"Hybrid Cloud Storage Sync Using AWS Storage Gateway"** was designed and implemented by **Satyam Kumar** (USN: `1EP24CS134`), under the guidance of **Mrs. Triveni N** (Assistant Professor) and **Dr. I. Manimozhi** (HOD, Computer Science & Engineering), **East Point College of Engineering & Technology**, Bangalore, for the partial fulfillment of the requirements for the **V Semester B.E. Degree** in Computer Science & Engineering during the academic year 2026–27.
