@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hybrid Cloud Storage Sync Using AWS Storage Gateway | EPCET Capstone</title>
+  <title>AWS Management Console | Storage Gateway & Amazon S3</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Custom Styles -->
+  <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
   <script>
     tailwind.config = {
@@ -16,13 +16,13 @@
         extend: {
           colors: {
             aws: {
+              top: '#0b1320',
+              sidebar: '#0b121e',
+              main: '#070d17',
+              panel: '#0e1726',
+              border: '#1a273b',
               orange: '#ff9900',
-              squid: '#232f3e',
-              dark: '#0f141c',
-              blue: '#0972d3',
-              card: '#161b22',
-              border: '#30363d',
-              accent: '#58a6ff'
+              blue: '#0972d3'
             }
           }
         }
@@ -30,1001 +30,1090 @@
     }
   </script>
 </head>
-<body class="min-h-screen bg-[#0d1117] text-[#e6edf3] flex flex-col font-sans">
+<body class="bg-[#070d17] text-[#f1f5f9] min-h-screen flex flex-col font-sans select-none">
 
-  <!-- Top Academic & College Header -->
-  <header class="border-b border-[#30363d] bg-[#161b22]/95 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
-      <div class="flex items-center space-x-3">
-        <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white font-bold px-2 py-1 rounded shadow-sm text-sm tracking-wide">
-          EPCET
-        </div>
-        <div>
-          <div class="font-semibold text-slate-200 text-sm">East Point College of Engineering & Technology</div>
-          <div class="text-slate-400 text-[11px]">Dept of Computer Science & Engineering | Autonomous VTU | NAAC A Grade</div>
-        </div>
-      </div>
-      <div class="flex items-center flex-wrap gap-4 text-[11px] text-slate-300">
-        <span class="bg-[#21262d] px-2.5 py-1 rounded border border-[#30363d]">
-          <strong class="text-amber-400">Student:</strong> Satyam Kumar (USN: 1EP24CS134)
-        </span>
-        <span class="bg-[#21262d] px-2.5 py-1 rounded border border-[#30363d] hidden sm:inline-block">
-          <strong class="text-amber-400">Course:</strong> 24CS562 - V Sem Capstone
-        </span>
-        <span class="bg-[#21262d] px-2.5 py-1 rounded border border-[#30363d] hidden md:inline-block">
-          <strong class="text-amber-400">Guide:</strong> Mrs. Triveni N | <strong class="text-amber-400">HOD:</strong> Dr. I. Manimozhi
-        </span>
-      </div>
-    </div>
+  <!-- ========================================================================= -->
+  <!-- 1. AUTHENTIC AWS GLOBAL NAVIGATION BAR (Top 48px Header) -->
+  <!-- ========================================================================= -->
+  <header class="aws-top-bar flex items-center justify-between px-3 z-50 sticky top-0">
+    
+    <!-- Left: AWS Logo & Service Breadcrumbs -->
+    <div class="flex items-center space-x-3 text-xs">
+      <!-- AWS Official SVG Logo -->
+      <a href="javascript:void(0)" onclick="navigateTo('overview')" class="flex items-center space-x-2 text-white hover:opacity-90 transition pr-2 border-r border-[#1e293b]">
+        <svg class="h-5 w-auto" viewBox="0 0 80 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.2 36.5c-3.1 0-5.7-.9-7.8-2.6-2.1-1.7-3.1-4-3.1-6.8 0-2.9 1-5.2 3-6.9 2-1.7 4.7-2.6 7.9-2.6 1.8 0 3.4.3 4.8.8v-2.3c0-1.8-.5-3.2-1.5-4.1-1-.9-2.5-1.4-4.5-1.4-1.5 0-3 .2-4.5.7-1.5.5-2.9 1.1-4.2 2l-2.4-4.6c1.7-1.1 3.6-1.9 5.7-2.5 2.1-.6 4.3-.9 6.6-.9 3.9 0 6.9 1 9 3 2.1 2 3.1 4.8 3.1 8.5v19.1h-5.8v-3.7c-1.8 2.6-4.5 4.3-6.8 4.3zm.8-4.8c1.8 0 3.4-.6 4.8-1.7 1.4-1.1 2.1-2.7 2.1-4.8v-1.7c-1.3-.5-2.7-.8-4.2-.8-1.9 0-3.4.4-4.5 1.3-1.1.9-1.6 2-1.6 3.4 0 1.4.5 2.5 1.5 3.3 1 .7 2.3 1 3.9 1zm24.7 4.1l-7.7-26.6h6.5l4.8 18.4 4.5-18.4h6.3l4.5 18.4 4.8-18.4h6.4L58.5 35.8h-6.8zm41.6.7c-2.4 0-4.7-.4-6.8-1.2-2.1-.8-3.9-2-5.4-3.5l3.9-4.2c1.2 1.2 2.6 2.1 4.1 2.7 1.5.6 3 .9 4.5.9 1.7 0 2.9-.3 3.7-.9.8-.6 1.2-1.4 1.2-2.3 0-.8-.3-1.4-1-1.9-.7-.5-1.8-.9-3.4-1.3l-2.7-.7c-2.8-.7-4.8-1.8-6.1-3.2-1.3-1.4-1.9-3.2-1.9-5.4 0-2.6.9-4.7 2.8-6.3 1.9-1.6 4.4-2.4 7.5-2.4 2.1 0 4.1.3 6 .9 1.9.6 3.5 1.5 4.8 2.7l-3.6 4.2c-1.1-.9-2.3-1.6-3.6-2-1.3-.4-2.6-.6-3.8-.6-1.5 0-2.6.3-3.4.8-.8.5-1.2 1.3-1.2 2.2 0 .8.3 1.4 1 1.9.7.5 1.8.9 3.4 1.3l2.7.7c2.9.7 5 1.8 6.3 3.3 1.3 1.5 1.9 3.3 1.9 5.5 0 2.7-.9 4.9-2.8 6.4-1.9 1.5-4.5 2.2-7.8 2.2z" fill="#ffffff"/>
+          <path d="M84.5 49.3c-10.2 6.3-24.8 9.7-39.7 9.7-18.8 0-35.8-5.7-44.8-14.7-.7-.7-.1-1.7.8-1.2 10.3 5.4 25.1 8.8 44 8.8 13.9 0 27.5-3 38.6-8.5 1.2-.6 2.2.8 1.1 1.9z" fill="#FF9900"/>
+          <path d="M87.4 46.2c-1.3-1.4-8.8-1.1-12.2-.6-.5.1-.7-.4-.3-.7 2.6-2.1 9.4-1.5 13.4 3.4 1 1.2.3 2.3-.9 1.7-2.6-1.2-4.1-.7-.7-3.8z" fill="#FF9900"/>
+        </svg>
+        <span class="font-bold tracking-tight text-sm text-slate-100 hidden sm:inline" id="topServiceName">Storage Gateway</span>
+      </a>
 
-    <!-- AWS Service Header -->
-    <div class="bg-[#0f141c] border-t border-[#30363d] px-4 py-3 shadow-md">
-      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded bg-[#ff9900]/20 border border-[#ff9900]/40 flex items-center justify-center text-[#ff9900]">
-            <i data-lucide="cloud-cog" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <div class="flex items-center space-x-2">
-              <h1 class="text-base font-bold text-white tracking-wide">Hybrid Cloud Storage Sync</h1>
-              <span class="bg-[#238636]/20 text-[#3fb950] text-[10px] font-semibold px-2 py-0.5 rounded-full border border-[#238636]/40 flex items-center space-x-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#3fb950] animate-pulse"></span>
-                <span>GATEWAY ACTIVE</span>
-              </span>
-            </div>
-            <p class="text-[11px] text-slate-400">AWS Storage Gateway (S3 File Gateway) &bull; ap-south-1 (Mumbai) &bull; Appliance ID: <span class="mono text-slate-300">gw-09b3f71c42</span></p>
-          </div>
-        </div>
-
-        <!-- Quick Gateway Health Stats -->
-        <div class="flex items-center gap-3 text-xs">
-          <div class="bg-[#161b22] border border-[#30363d] px-3 py-1.5 rounded-lg flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <div>
-              <div class="text-[10px] text-slate-400">Local Cache Hit</div>
-              <div class="font-bold text-white mono" id="headerCacheHit">94.8%</div>
-            </div>
-          </div>
-          <div class="bg-[#161b22] border border-[#30363d] px-3 py-1.5 rounded-lg flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-            <div>
-              <div class="text-[10px] text-slate-400">S3 Sync Status</div>
-              <div class="font-bold text-white mono" id="headerSyncStatus">IN SYNC</div>
-            </div>
-          </div>
-          <div class="bg-[#161b22] border border-[#30363d] px-3 py-1.5 rounded-lg hidden sm:flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-            <div>
-              <div class="text-[10px] text-slate-400">Encryption</div>
-              <div class="font-bold text-white mono">SSE-KMS</div>
-            </div>
-          </div>
-          <button onclick="triggerQuickSync()" class="bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-semibold px-3 py-1.5 rounded text-xs flex items-center space-x-1.5 transition">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="syncSpinnerIcon"></i>
-            <span>Refresh Cache</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto border-t border-[#21262d] scrollbar-none">
-      <nav class="flex space-x-1 py-1" id="navTabs">
-        <button onclick="switchTab('simulator')" id="tab-simulator" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-white bg-[#21262d] border border-[#30363d] flex items-center space-x-2">
-          <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-[#ff9900]"></i>
-          <span>1. Gateway Simulator</span>
-        </button>
-        <button onclick="switchTab('s3')" id="tab-s3" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-[#21262d]/50 flex items-center space-x-2">
-          <i data-lucide="folder-git-2" class="w-3.5 h-3.5 text-blue-400"></i>
-          <span>2. Amazon S3 Explorer</span>
-        </button>
-        <button onclick="switchTab('ai')" id="tab-ai" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-[#21262d]/50 flex items-center space-x-2">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i>
-          <span>3. AI Services (Macie & OCR)</span>
-        </button>
-        <button onclick="switchTab('cloudwatch')" id="tab-cloudwatch" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-[#21262d]/50 flex items-center space-x-2">
-          <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>4. CloudWatch & Trail</span>
-        </button>
-        <button onclick="switchTab('tests')" id="tab-tests" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-[#21262d]/50 flex items-center space-x-2">
-          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>5. Test Scenarios (T1-T8)</span>
-        </button>
-        <button onclick="switchTab('architecture')" id="tab-architecture" class="tab-btn px-3 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-[#21262d]/50 flex items-center space-x-2">
-          <i data-lucide="network" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>6. Architecture & Viva Guide</span>
-        </button>
+      <!-- Breadcrumbs Path -->
+      <nav class="flex items-center space-x-1.5 text-[11px] text-[#94a3b8]" id="topBreadcrumbs">
+        <span class="hover:text-white cursor-pointer" onclick="navigateTo('overview')">Storage Gateway</span>
+        <span>&rsaquo;</span>
+        <span class="hover:text-white cursor-pointer" onclick="navigateTo('overview')">Gateways</span>
+        <span>&rsaquo;</span>
+        <span class="hover:text-white cursor-pointer" onclick="navigateTo('overview')">sgw-hybrid-01</span>
+        <span>&rsaquo;</span>
+        <span class="text-white font-medium" id="crumbCurrent">Overview</span>
       </nav>
     </div>
-  </header>
 
-  <!-- Notification Toast Container -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 max-w-sm pointer-events-none"></div>
-
-  <!-- Main Content Area -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
-
-    <!-- ========================================== -->
-    <!-- TAB 1: HYBRID STORAGE GATEWAY SIMULATOR -->
-    <!-- ========================================== -->
-    <div id="view-simulator" class="tab-content space-y-6">
+    <!-- Right: Region Selector, Notifications, User Account -->
+    <div class="flex items-center space-x-4 text-xs text-[#cbd5e1]">
       
-      <!-- Interactive Data Flow Banner (Fig 4.2 / 3.1) -->
-      <div class="aws-card rounded-xl p-5 relative overflow-hidden">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-bold text-white flex items-center space-x-2">
-            <i data-lucide="git-merge" class="w-4 h-4 text-[#ff9900]"></i>
-            <span>Live Data Flow: File Write, Local Caching & Asynchronous Cloud Sync</span>
-          </h2>
-          <span class="text-[11px] text-slate-400">Figure 4.2 AWS Storage Gateway Pipeline</span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 relative py-2">
-          <!-- Step 1 -->
-          <div class="p-3 rounded-lg border border-[#30363d] bg-[#0d1117] relative flex flex-col justify-between" id="flowStep1">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">1. Local Client</div>
-            <div class="text-xs font-bold text-white mt-1">Write to Share</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">NFS/SMB Mount</div>
-            <div class="mt-2 text-[10px] font-mono text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded w-fit">Latency: 0.9ms</div>
-          </div>
-          <!-- Step 2 -->
-          <div class="p-3 rounded-lg border border-[#30363d] bg-[#0d1117] relative flex flex-col justify-between" id="flowStep2">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">2. Local SSD Cache</div>
-            <div class="text-xs font-bold text-white mt-1">Fast Acknowledgment</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">Stored on Cache Disk</div>
-            <div class="mt-2 text-[10px] font-mono text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded w-fit">NVMe Write: OK</div>
-          </div>
-          <!-- Step 3 -->
-          <div class="p-3 rounded-lg border border-[#30363d] bg-[#0d1117] relative flex flex-col justify-between" id="flowStep3">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">3. Upload Buffer</div>
-            <div class="text-xs font-bold text-white mt-1">Async Queue</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">Queues Dirty Bytes</div>
-            <div class="mt-2 text-[10px] font-mono text-blue-400 bg-blue-400/10 px-1.5 py-0.5 rounded w-fit">Non-blocking</div>
-          </div>
-          <!-- Step 4 -->
-          <div class="p-3 rounded-lg border border-[#30363d] bg-[#0d1117] relative flex flex-col justify-between" id="flowStep4">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">4. Cloud Transit</div>
-            <div class="text-xs font-bold text-white mt-1">HTTPS / TLS 1.3</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">Port 443 Encrypted</div>
-            <div class="mt-2 text-[10px] font-mono text-purple-400 bg-purple-400/10 px-1.5 py-0.5 rounded w-fit">Direct Connect/VPN</div>
-          </div>
-          <!-- Step 5 -->
-          <div class="p-3 rounded-lg border border-[#30363d] bg-[#0d1117] relative flex flex-col justify-between" id="flowStep5">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">5. Amazon S3</div>
-            <div class="text-xs font-bold text-white mt-1">Durable Object</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">SSE-KMS Encryption</div>
-            <div class="mt-2 text-[10px] font-mono text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded w-fit">11 9s Durability</div>
-          </div>
-        </div>
+      <!-- Academic Capstone Indicator Pill -->
+      <div class="hidden lg:flex items-center space-x-1.5 bg-[#132238] border border-[#1e3a5f] px-2.5 py-1 rounded text-[11px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-amber-400 font-semibold">EPCET CSE</span>
+        <span class="text-slate-400">| 24CS562 Capstone</span>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Left Column: File Share & Client Write Interface -->
-        <div class="lg:col-span-1 space-y-6">
-          
-          <!-- Client Environment Selector -->
-          <div class="aws-card rounded-xl p-5 space-y-4">
-            <h3 class="text-sm font-bold text-white flex items-center justify-between">
-              <span class="flex items-center space-x-2">
-                <i data-lucide="terminal" class="w-4 h-4 text-[#ff9900]"></i>
-                <span>Client Protocol & Mount</span>
-              </span>
-              <span class="text-[11px] text-slate-400 font-mono">FR1 / FR2</span>
-            </h3>
+      <!-- Region Selector: Mumbai -->
+      <div class="flex items-center space-x-1 cursor-pointer hover:text-white py-1 px-1.5 rounded">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i>
+        <span class="text-[11px] font-medium">Mumbai (ap-south-1)</span>
+        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+      </div>
 
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="setProtocol('nfs')" id="proto-nfs" class="p-2.5 rounded-lg border border-[#ff9900] bg-[#ff9900]/10 text-xs font-semibold text-white flex items-center justify-center space-x-2">
-                <i data-lucide="server" class="w-4 h-4 text-[#ff9900]"></i>
-                <span>Linux NFS (v4.1)</span>
-              </button>
-              <button onclick="setProtocol('smb')" id="proto-smb" class="p-2.5 rounded-lg border border-[#30363d] bg-[#0d1117] text-xs font-medium text-slate-400 hover:text-white flex items-center justify-center space-x-2">
-                <i data-lucide="monitor" class="w-4 h-4 text-blue-400"></i>
-                <span>Windows SMB (3.0)</span>
-              </button>
-            </div>
+      <!-- Notification Bell -->
+      <button class="relative hover:text-white p-1" title="AWS Notifications">
+        <i data-lucide="bell" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+        <span class="absolute top-0 right-0 w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+      </button>
 
-            <!-- Mount Command Display -->
-            <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-[11px] mono text-slate-300 relative">
-              <div class="text-[10px] text-slate-400 mb-1 flex justify-between items-center">
-                <span>Active Mount Path</span>
-                <span class="text-emerald-400">Connected</span>
-              </div>
-              <div id="mountCmdText" class="text-amber-300">
-                sudo mount -t nfs -o nolock,hard 192.168.1.100:/epcet-hybrid-storage-vault /mnt/hybrid_sync
-              </div>
-            </div>
+      <!-- Help Icon -->
+      <button class="hover:text-white p-1" onclick="navigateTo('report')" title="Project Documentation & Viva Guide">
+        <i data-lucide="help-circle" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+      </button>
 
-            <!-- Form: Create / Write File into Share -->
-            <form onsubmit="handleLocalWrite(event)" class="space-y-3 pt-2 border-t border-[#21262d]">
-              <div class="text-xs font-semibold text-slate-200">Write New File to Local Share</div>
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">File Name & Extension</label>
-                <input type="text" id="inputFileName" required placeholder="e.g. project_analysis.pdf, dataset.csv" class="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#ff9900] mono">
-              </div>
+      <!-- User Account Dropdown -->
+      <div class="flex items-center space-x-2 pl-2 border-l border-[#1e293b] cursor-pointer hover:text-white" onclick="navigateTo('report')">
+        <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-bold text-[10px]">
+          SK
+        </div>
+        <div class="text-left hidden sm:block">
+          <div class="text-[11px] font-semibold text-slate-200 leading-tight">Satyam Kumar</div>
+          <div class="text-[9px] text-slate-400 leading-none mono">1EP24CS134</div>
+        </div>
+        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+      </div>
 
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-[11px] text-slate-400 mb-1">Category / Type</label>
-                  <select id="inputFileCategory" class="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#ff9900]">
-                    <option value="doc">Engineering Document (.pdf / .docx)</option>
-                    <option value="data">Log / CSV Dataset (.csv / .json)</option>
-                    <option value="img">Scanned Invoice / Image (.png / .jpg)</option>
-                    <option value="backup">Database Backup Dump (.tar.gz)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[11px] text-slate-400 mb-1">Simulated Size</label>
-                  <select id="inputFileSize" class="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#ff9900]">
-                    <option value="2.4 MB">2.4 MB (Fast sync)</option>
-                    <option value="15.8 MB">15.8 MB (Standard)</option>
-                    <option value="128 MB">128 MB (Heavy)</option>
-                    <option value="512 MB">512 MB (Large Batch)</option>
-                  </select>
-                </div>
-              </div>
+    </div>
 
-              <div>
-                <label class="block text-[11px] text-slate-400 mb-1">File Content / Sensitive Payload</label>
-                <textarea id="inputFileContent" rows="2" placeholder="Enter content or test text (e.g. confidential notes, customer ID, invoice data)..." class="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#ff9900] mono"></textarea>
-              </div>
+  </header>
 
-              <div class="flex items-center space-x-2 pt-1">
-                <button type="submit" id="btnWriteLocal" class="flex-1 bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold py-2 px-4 rounded-lg text-xs flex items-center justify-center space-x-1.5 shadow transition">
-                  <i data-lucide="save" class="w-4 h-4"></i>
-                  <span>Save to Share (Async Sync)</span>
-                </button>
-                <button type="button" onclick="loadSampleFile()" class="bg-[#21262d] hover:bg-[#30363d] text-slate-300 py-2 px-3 rounded-lg text-xs transition" title="Load sample document with text">
-                  Sample
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Local Cache Disk Gauges -->
-          <div class="aws-card rounded-xl p-5 space-y-4">
-            <h3 class="text-sm font-bold text-white flex items-center justify-between">
-              <span class="flex items-center space-x-2">
-                <i data-lucide="disc" class="w-4 h-4 text-emerald-400"></i>
-                <span>Storage Gateway Local Cache Disk</span>
-              </span>
-              <span class="text-[10px] text-slate-400 font-mono">150 GiB NVMe</span>
-            </h3>
-
-            <!-- Cache Capacity Bar -->
-            <div class="space-y-1.5">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-400">Cache Used: <strong class="text-white" id="statCacheUsedText">64.8 GiB / 150 GiB</strong></span>
-                <span class="text-amber-400 font-mono" id="statCachePercentUsed">43.2%</span>
-              </div>
-              <div class="w-full bg-[#0d1117] h-2.5 rounded-full overflow-hidden border border-[#30363d]">
-                <div id="barCacheUsed" class="bg-gradient-to-r from-emerald-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 43.2%;"></div>
-              </div>
-            </div>
-
-            <!-- Dirty Bytes (Pending Cloud Upload) -->
-            <div class="space-y-1.5">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-400">Cache Dirty (Pending Sync): <strong class="text-white" id="statCacheDirtyText">0 MB</strong></span>
-                <span class="text-blue-400 font-mono" id="statCachePercentDirty">0.0%</span>
-              </div>
-              <div class="w-full bg-[#0d1117] h-2 rounded-full overflow-hidden border border-[#30363d]">
-                <div id="barCacheDirty" class="bg-blue-500 h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-2 text-center text-xs">
-              <div class="bg-[#0d1117] p-2.5 rounded border border-[#30363d]">
-                <div class="text-[10px] text-slate-400">Cache Hit Ratio</div>
-                <div class="text-base font-bold text-emerald-400 mono mt-0.5" id="statCacheHitRatio">94.8%</div>
-                <div class="text-[10px] text-slate-400 mt-0.5">Avg Latency: 1.2ms</div>
-              </div>
-              <div class="bg-[#0d1117] p-2.5 rounded border border-[#30363d]">
-                <div class="text-[10px] text-slate-400">Cloud Fetch Miss</div>
-                <div class="text-base font-bold text-amber-400 mono mt-0.5" id="statCacheMissRatio">5.2%</div>
-                <div class="text-[10px] text-slate-400 mt-0.5">Avg Latency: 168ms</div>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-1">
-              <button onclick="flushLocalCache()" class="text-xs text-rose-400 hover:text-rose-300 flex items-center space-x-1 transition">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                <span>Flush Local Cache (Test Misses)</span>
-              </button>
-              <button onclick="triggerQuickSync()" class="text-xs text-[#ff9900] hover:text-amber-300 flex items-center space-x-1 transition">
-                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                <span>Force S3 Sync</span>
-              </button>
-            </div>
-          </div>
-
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN LAYOUT: SIDEBAR + CONSOLE CONTENT -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT SIDEBAR PANEL (Matching Screenshot exact layout) -->
+    <aside class="aws-sidebar flex flex-col justify-between overflow-y-auto shrink-0 select-none">
+      
+      <div>
+        <!-- Sidebar Title & Toggle -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-[#162235]">
+          <span class="font-bold text-xs text-white uppercase tracking-wider" id="sidebarTitle">Storage Gateway</span>
+          <button class="text-slate-400 hover:text-white p-0.5" title="Collapse sidebar">
+            <i data-lucide="panel-left-close" class="w-3.5 h-3.5"></i>
+          </button>
         </div>
 
-        <!-- Right 2 Columns: Local Share Files & Activity Monitor -->
-        <div class="lg:col-span-2 space-y-6">
+        <!-- Main Nav Items (Storage Gateway) -->
+        <nav class="py-2" id="sidebarNav">
+          
+          <div onclick="navigateTo('overview')" id="nav-overview" class="aws-sidebar-item active">
+            <i data-lucide="server" class="w-4 h-4 text-[#58a6ff]"></i>
+            <span>Gateways</span>
+          </div>
 
-          <!-- Local Share File Browser -->
-          <div class="aws-card rounded-xl p-5 space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-                  <i data-lucide="folder-tree" class="w-4 h-4 text-[#ff9900]"></i>
-                  <span>Local Mounted Share Files: <span class="mono text-amber-300 font-normal" id="currentSharePath">/mnt/hybrid_sync/</span></span>
-                </h3>
-                <p class="text-[11px] text-slate-400">Files stored in gateway cache and synchronized with <span class="mono text-slate-300">s3://epcet-hybrid-storage-vault/</span></p>
+          <div onclick="navigateTo('fileshares')" id="nav-fileshares" class="aws-sidebar-item">
+            <i data-lucide="folder-tree" class="w-4 h-4"></i>
+            <span>File shares</span>
+          </div>
+
+          <div onclick="navigateTo('volumes')" id="nav-volumes" class="aws-sidebar-item">
+            <i data-lucide="hard-drive" class="w-4 h-4"></i>
+            <span>Volumes</span>
+          </div>
+
+          <div onclick="navigateTo('tapes')" id="nav-tapes" class="aws-sidebar-item">
+            <i data-lucide="cassette-tape" class="w-4 h-4"></i>
+            <span>Tapes</span>
+          </div>
+
+          <!-- Section: Monitoring -->
+          <div class="aws-sidebar-section-title">Monitoring</div>
+
+          <div onclick="navigateTo('metrics')" id="nav-metrics" class="aws-sidebar-item">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span>Metrics</span>
+          </div>
+
+          <div onclick="navigateTo('cloudwatch')" id="nav-cloudwatch" class="aws-sidebar-item">
+            <i data-lucide="gauge" class="w-4 h-4"></i>
+            <span class="flex-1">CloudWatch</span>
+            <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </div>
+
+          <!-- Section: Resources -->
+          <div class="aws-sidebar-section-title">Resources</div>
+
+          <div onclick="navigateTo('s3')" id="nav-s3" class="aws-sidebar-item">
+            <i data-lucide="folder-git-2" class="w-4 h-4"></i>
+            <span>S3 buckets</span>
+          </div>
+
+          <div onclick="navigateTo('iam')" id="nav-iam" class="aws-sidebar-item">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>IAM roles</span>
+          </div>
+
+          <div onclick="navigateTo('logs')" id="nav-logs" class="aws-sidebar-item">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Logs</span>
+          </div>
+
+          <!-- Section: AI Services & Capstone -->
+          <div class="aws-sidebar-section-title">AI & Capstone</div>
+
+          <div onclick="navigateTo('ai')" id="nav-ai" class="aws-sidebar-item">
+            <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
+            <span>AI Services (Macie/OCR)</span>
+          </div>
+
+          <div onclick="navigateTo('tests')" id="nav-tests" class="aws-sidebar-item">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <span>Test Scenarios (T1-T8)</span>
+          </div>
+
+          <div onclick="navigateTo('report')" id="nav-report" class="aws-sidebar-item">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-amber-400"></i>
+            <span>EPCET Project Report</span>
+          </div>
+
+        </nav>
+      </div>
+
+      <!-- Bottom User / Appliance Badge -->
+      <div class="p-3 border-t border-[#162235] bg-[#09101b] text-[11px] space-y-1">
+        <div class="text-slate-400 flex items-center justify-between">
+          <span>Storage Gateway</span>
+          <span class="text-emerald-400 font-bold">ONLINE</span>
+        </div>
+        <div class="mono text-[10px] text-slate-300">ID: sgw-hybrid-01</div>
+        <div class="text-[10px] text-slate-500">Host: ESXi / 192.168.1.100</div>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONSOLE WORKSPACE -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#070d17] space-y-5">
+      
+      <!-- ===================================================================== -->
+      <!-- VIEW 1: GATEWAY OVERVIEW (EXACT IMAGE 3 REPLICA) -->
+      <!-- ===================================================================== -->
+      <div id="view-overview" class="view-panel space-y-5">
+        
+        <!-- Top Gateway Title Banner (Exact match) -->
+        <div class="aws-panel p-5">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            
+            <div class="flex items-center space-x-3.5">
+              <!-- Green Gateway Appliance Icon -->
+              <div class="w-10 h-10 rounded-lg bg-[#0d2a1b] border border-[#1b5e39] flex items-center justify-center text-emerald-400">
+                <i data-lucide="server" class="w-6 h-6"></i>
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="text-xs bg-[#21262d] border border-[#30363d] px-2.5 py-1 rounded text-slate-300 mono" id="shareFileCount">6 items</span>
+
+              <div>
+                <div class="flex items-center space-x-2.5">
+                  <h1 class="text-lg font-bold text-white tracking-tight">sgw-hybrid-01</h1>
+                  <span class="status-badge-active">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Running</span>
+                  </span>
+                </div>
+                <div class="text-xs text-[#94a3b8] mt-0.5">
+                  <span>S3 File Gateway</span>
+                  <span class="mx-1.5 text-slate-600">|</span>
+                  <span>Type: File</span>
+                  <span class="mx-1.5 text-slate-600">|</span>
+                  <span>Activation date: Nov 18, 2026 10:24 (IST)</span>
+                </div>
               </div>
             </div>
 
-            <!-- File Table -->
+            <!-- Action Buttons on Right -->
+            <div class="flex items-center space-x-2.5">
+              <button onclick="openActionsDropdown()" class="btn-aws-secondary">
+                <span>Actions</span>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+              </button>
+              <button onclick="navigateTo('fileshares')" class="btn-aws-primary">
+                <span>Edit file share</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Horizontal Tabs: Overview, File shares, Monitoring, Tags -->
+          <div class="flex border-b border-[#1a273b] mt-5 -mb-5 space-x-2 overflow-x-auto">
+            <button onclick="navigateTo('overview')" class="aws-tab active">Overview</button>
+            <button onclick="navigateTo('fileshares')" class="aws-tab">File shares</button>
+            <button onclick="navigateTo('cloudwatch')" class="aws-tab">Monitoring</button>
+            <button onclick="openTagsModal()" class="aws-tab">Tags</button>
+          </div>
+        </div>
+
+        <!-- 1. Gateway metrics (CloudWatch) Section (Row of 6 Metric Tiles) -->
+        <div class="aws-panel p-5 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i data-lucide="bar-chart-2" class="w-4 h-4 text-[#58a6ff]"></i>
+              <span>Gateway metrics (CloudWatch)</span>
+            </h2>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-[#94a3b8] bg-[#0b1422] border border-[#1a273b] px-2.5 py-1 rounded cursor-pointer flex items-center space-x-1">
+                <span>Last 24 hours</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- The 6 Exact Metric Tiles -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            
+            <!-- Tile 1: CacheHitPercent -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">CacheHitPercent</span>
+                <i data-lucide="layers" class="w-4 h-4 text-emerald-400"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2" id="ovCacheHit">94.8%</div>
+              <div class="text-[10px] text-emerald-400 flex items-center space-x-1">
+                <span>&uarr;</span>
+                <span>+2.1% (24h)</span>
+              </div>
+            </div>
+
+            <!-- Tile 2: CachePercentUsed -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">CachePercentUsed</span>
+                <i data-lucide="hard-drive" class="w-4 h-4 text-[#0972d3]"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2" id="ovCacheUsed">43.2%</div>
+              <div class="text-[10px] text-amber-400 flex items-center space-x-1">
+                <span>&uarr;</span>
+                <span>+6.4% (24h)</span>
+              </div>
+            </div>
+
+            <!-- Tile 3: CachePercentDirty -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">CachePercentDirty</span>
+                <i data-lucide="disc" class="w-4 h-4 text-purple-400"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2" id="ovCacheDirty">0.0%</div>
+              <div class="text-[10px] text-slate-400" id="ovCacheDirtyStatus">- No pending data</div>
+            </div>
+
+            <!-- Tile 4: CloudBytesUploaded -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">CloudBytesUploaded</span>
+                <i data-lucide="cloud-upload" class="w-4 h-4 text-[#58a6ff]"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2" id="ovBytesUp">1.24 GB</div>
+              <div class="text-[10px] text-emerald-400 flex items-center space-x-1">
+                <span>&uarr;</span>
+                <span>+320 MB (24h)</span>
+              </div>
+            </div>
+
+            <!-- Tile 5: CloudBytesDownloaded -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">CloudBytesDownloaded</span>
+                <i data-lucide="cloud-download" class="w-4 h-4 text-[#58a6ff]"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2" id="ovBytesDown">2.18 GB</div>
+              <div class="text-[10px] text-blue-400 flex items-center space-x-1">
+                <span>&uarr;</span>
+                <span>+480 MB (24h)</span>
+              </div>
+            </div>
+
+            <!-- Tile 6: IoWaitPercent -->
+            <div class="metric-tile">
+              <div class="flex items-center justify-between text-slate-400">
+                <span class="text-[11px] font-semibold">IoWaitPercent</span>
+                <i data-lucide="timer" class="w-4 h-4 text-emerald-400"></i>
+              </div>
+              <div class="text-xl font-bold text-white mono my-2">1.2%</div>
+              <div class="text-[10px] text-emerald-400 flex items-center space-x-1">
+                <span>&darr;</span>
+                <span>-0.4% (24h)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. Mid Section: Gateway status & File shares (1) side by side -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          
+          <!-- Gateway Status Card -->
+          <div class="aws-panel p-5 space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Gateway status</span>
+            </h3>
+
+            <div class="grid grid-cols-2 gap-y-3.5 text-xs">
+              <div>
+                <span class="text-slate-400 block text-[11px]">Status</span>
+                <span class="status-badge-active mt-0.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span>Running</span>
+                </span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block text-[11px]">Gateway type</span>
+                <span class="text-white font-medium">S3 File Gateway</span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block text-[11px]">Gateway ID</span>
+                <span class="text-white mono">sgw-hybrid-01</span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block text-[11px]">Caching storage</span>
+                <span class="text-white font-medium">150 GB (Local NVMe)</span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block text-[11px]">Region</span>
+                <span class="text-white font-medium">ap-south-1 (Mumbai)</span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block text-[11px]">Last heartbeat</span>
+                <span class="text-slate-300">Nov 20, 2026 11:42 (IST)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Shares (1) Card -->
+          <div class="aws-panel p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+                <i data-lucide="folder" class="w-4 h-4 text-emerald-400"></i>
+                <span>File shares (1)</span>
+              </h3>
+              <button onclick="navigateTo('fileshares')" class="btn-aws-primary py-1 px-3 text-[11px]">
+                <span>Create file share</span>
+              </button>
+            </div>
+
+            <!-- Table matching image 3 -->
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
+              <table class="aws-table">
                 <thead>
-                  <tr class="border-b border-[#30363d] text-slate-400 uppercase text-[10px] tracking-wider">
-                    <th class="pb-2 pl-2">Name / Key</th>
-                    <th class="pb-2">Size</th>
-                    <th class="pb-2">Cache State</th>
-                    <th class="pb-2">S3 Cloud State</th>
-                    <th class="pb-2">Last Access</th>
-                    <th class="pb-2 text-right pr-2">Actions</th>
+                  <tr>
+                    <th>Name</th>
+                    <th>S3 bucket</th>
+                    <th>Status</th>
+                    <th>Path</th>
                   </tr>
                 </thead>
-                <tbody id="localFilesTableBody" class="divide-y divide-[#21262d]">
-                  <!-- Injected via JavaScript -->
+                <tbody>
+                  <tr>
+                    <td>
+                      <a href="javascript:void(0)" onclick="navigateTo('fileshares')" class="font-semibold">company-share</a>
+                    </td>
+                    <td>
+                      <a href="javascript:void(0)" onclick="navigateTo('s3')" class="flex items-center space-x-1">
+                        <span>hybrid-cloud-demo</span>
+                        <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+                      </a>
+                    </td>
+                    <td>
+                      <span class="status-badge-active">Active</span>
+                    </td>
+                    <td class="mono text-slate-300 text-[11px]">\\sgw-hybrid-01\company-share</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
 
-            <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-[#21262d]">
-              <div class="flex items-center space-x-3 text-[11px]">
-                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>In Local Cache (Fast)</span></span>
-                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span><span>Uploaded to S3</span></span>
-                <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Pending Async Sync</span></span>
-              </div>
-              <div class="text-[11px]">Click <strong>"Read"</strong> on any file to test cache hit/miss latency.</div>
+            <div class="flex items-center justify-between pt-1 text-[11px] text-slate-400">
+              <span>Backed by S3 bucket: <strong>hybrid-cloud-demo</strong></span>
+              <button onclick="triggerQuickSync()" class="text-[#ff9900] hover:underline flex items-center space-x-1">
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                <span>Sync Cache</span>
+              </button>
             </div>
           </div>
 
-          <!-- Live Gateway Terminal / Sync Event Log -->
-          <div class="aws-card rounded-xl p-5 space-y-3">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-                <i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i>
-                <span>Storage Gateway Kernel & Sync Activity Logs</span>
-              </h3>
-              <div class="flex items-center space-x-2">
-                <button onclick="clearActivityLogs()" class="text-[11px] text-slate-400 hover:text-white transition">Clear Logs</button>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              </div>
-            </div>
+        </div>
 
-            <div id="gatewayActivityConsole" class="bg-[#0b0e14] border border-[#30363d] rounded-lg p-3 font-mono text-[11px] text-slate-300 h-48 overflow-y-auto space-y-1.5 scrollbar-thin">
-              <!-- Logs injected by JS -->
+        <!-- 3. Bottom CloudWatch Chart (Exact match with area curve) -->
+        <div class="aws-panel p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i data-lucide="activity" class="w-4 h-4 text-[#58a6ff]"></i>
+              <span>CloudWatch – Key Metrics</span>
+            </h3>
+            <div class="flex items-center space-x-4 text-xs">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span class="text-slate-300">CacheHitPercent</span>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#0972d3]"></span>
+                <span class="text-slate-300">CachePercentUsed</span>
+              </div>
             </div>
           </div>
 
+          <!-- SVG Dual Line Graph matching Screenshot 3 -->
+          <div class="w-full bg-[#09111e] rounded-lg p-3 border border-[#172336] relative overflow-hidden">
+            <svg class="w-full h-36" viewBox="0 0 1000 160" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="gradGreen" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/>
+                </linearGradient>
+                <linearGradient id="gradBlue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#0972d3" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#0972d3" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Grid Horizontal Lines -->
+              <line x1="40" y1="20" x2="980" y2="20" stroke="#162235" stroke-dasharray="3,3"/>
+              <line x1="40" y1="60" x2="980" y2="60" stroke="#162235" stroke-dasharray="3,3"/>
+              <line x1="40" y1="100" x2="980" y2="100" stroke="#162235" stroke-dasharray="3,3"/>
+              <line x1="40" y1="140" x2="980" y2="140" stroke="#162235"/>
+
+              <!-- Y Axis Labels -->
+              <text x="32" y="24" fill="#64748b" font-size="10" text-anchor="end">100%</text>
+              <text x="32" y="64" fill="#64748b" font-size="10" text-anchor="end">75%</text>
+              <text x="32" y="104" fill="#64748b" font-size="10" text-anchor="end">50%</text>
+              <text x="32" y="144" fill="#64748b" font-size="10" text-anchor="end">0%</text>
+
+              <!-- Green Curve: CacheHitPercent (~95%) -->
+              <path d="M 40,28 Q 120,24 200,27 T 360,25 T 520,26 T 680,24 T 840,25 T 980,26 L 980,140 L 40,140 Z" fill="url(#gradGreen)"/>
+              <path d="M 40,28 Q 120,24 200,27 T 360,25 T 520,26 T 680,24 T 840,25 T 980,26" fill="none" stroke="#22c55e" stroke-width="2"/>
+
+              <!-- Blue Curve: CachePercentUsed (~43%) -->
+              <path d="M 40,88 Q 120,86 200,89 T 360,87 T 520,88 T 680,86 T 840,88 T 980,87 L 980,140 L 40,140 Z" fill="url(#gradBlue)"/>
+              <path d="M 40,88 Q 120,86 200,89 T 360,87 T 520,88 T 680,86 T 840,88 T 980,87" fill="none" stroke="#0972d3" stroke-width="2"/>
+
+              <!-- Curve Points -->
+              <circle cx="200" cy="27" r="3" fill="#22c55e"/>
+              <circle cx="520" cy="26" r="3" fill="#22c55e"/>
+              <circle cx="840" cy="25" r="3" fill="#22c55e"/>
+              <circle cx="980" cy="26" r="3" fill="#22c55e"/>
+
+              <circle cx="200" cy="89" r="3" fill="#0972d3"/>
+              <circle cx="520" cy="88" r="3" fill="#0972d3"/>
+              <circle cx="840" cy="88" r="3" fill="#0972d3"/>
+              <circle cx="980" cy="87" r="3" fill="#0972d3"/>
+            </svg>
+
+            <!-- Time X-Axis -->
+            <div class="flex justify-between text-[10px] text-slate-500 pt-1 px-8">
+              <span>00:00</span>
+              <span>02:00</span>
+              <span>04:00</span>
+              <span>06:00</span>
+              <span>08:00</span>
+              <span>10:00</span>
+              <span>12:00</span>
+              <span>14:00</span>
+              <span>16:00</span>
+              <span>18:00</span>
+              <span>20:00</span>
+              <span>22:00</span>
+            </div>
+          </div>
         </div>
 
       </div>
 
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 2: AMAZON S3 CLOUD EXPLORER & LIFECYCLE -->
-    <!-- ========================================== -->
-    <div id="view-s3" class="tab-content hidden space-y-6">
-      
-      <!-- S3 Bucket Header & Config -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-              <i data-lucide="bucket" class="w-5 h-5"></i>
+      <!-- ===================================================================== -->
+      <!-- VIEW 2: FILE SHARES (EXACT IMAGE 1 REPLICA) -->
+      <!-- ===================================================================== -->
+      <div id="view-fileshares" class="view-panel hidden space-y-5">
+        
+        <!-- Header Banner -->
+        <div class="aws-panel p-5">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3.5">
+              <div class="w-10 h-10 rounded-lg bg-[#0d2a1b] border border-[#1b5e39] flex items-center justify-center text-emerald-400">
+                <i data-lucide="server" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <div class="flex items-center space-x-2.5">
+                  <h1 class="text-lg font-bold text-white tracking-tight">sgw-hybrid-01</h1>
+                  <span class="status-badge-active">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>Running</span>
+                  </span>
+                </div>
+                <div class="text-xs text-[#94a3b8] mt-0.5">
+                  <span>S3 File Gateway</span> | <span>Type: File</span> | <span>Activation date: Nov 18, 2026 10:24 (IST)</span>
+                </div>
+              </div>
             </div>
+
+            <div class="flex items-center space-x-2.5">
+              <button class="btn-aws-secondary">
+                <span>Actions</span>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+              </button>
+              <button onclick="openCreateShareModal()" class="btn-aws-primary">
+                <span>Create file share</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex border-b border-[#1a273b] mt-5 -mb-5 space-x-2">
+            <button onclick="navigateTo('overview')" class="aws-tab">Overview</button>
+            <button onclick="navigateTo('fileshares')" class="aws-tab active">File shares</button>
+            <button onclick="navigateTo('cloudwatch')" class="aws-tab">Monitoring</button>
+            <button onclick="openTagsModal()" class="aws-tab">Tags</button>
+          </div>
+        </div>
+
+        <!-- File Shares (1) List Card (Matching Image 1) -->
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 class="text-sm font-bold text-white mono">s3://epcet-hybrid-storage-vault/</h2>
-              <p class="text-xs text-slate-400">AWS S3 Destination Bucket &bull; Region: <span class="text-slate-200">ap-south-1</span> &bull; Storage Gateway Target</p>
+              <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                <i data-lucide="folder" class="w-4 h-4 text-emerald-400"></i>
+                <span>File shares (1)</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">
+                File shares export your Amazon S3 data to your on-premises environment using NFS or SMB.
+              </p>
+            </div>
+
+            <!-- Search box -->
+            <div class="relative w-72">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
+              <input type="text" placeholder="Find file shares" class="w-full bg-[#0b1320] border border-[#1a273b] rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0972d3]">
             </div>
           </div>
 
-          <!-- S3 Bucket Security Badges -->
-          <div class="flex flex-wrap items-center gap-2 text-[11px]">
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded flex items-center space-x-1">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-              <span>Block Public Access: ON</span>
-            </span>
-            <span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2.5 py-1 rounded flex items-center space-x-1">
-              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-              <span>Versioning: ENABLED</span>
-            </span>
-            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded flex items-center space-x-1">
-              <i data-lucide="key" class="w-3.5 h-3.5"></i>
-              <span>KMS CMK: mrk-7c89f81a</span>
-            </span>
+          <!-- File Shares Table -->
+          <div class="overflow-x-auto">
+            <table class="aws-table">
+              <thead>
+                <tr>
+                  <th class="w-8"></th>
+                  <th>Name</th>
+                  <th>Protocol</th>
+                  <th>S3 bucket</th>
+                  <th>Access point</th>
+                  <th>Local path</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="bg-[#101b2d]">
+                  <td class="text-center">
+                    <input type="radio" checked class="accent-[#0972d3]">
+                  </td>
+                  <td>
+                    <a href="javascript:void(0)" class="font-semibold text-white">company-share</a>
+                  </td>
+                  <td>
+                    <span class="bg-[#132238] text-[#58a6ff] text-[10px] font-bold px-2 py-0.5 rounded border border-[#1e3a5f]">SMB</span>
+                  </td>
+                  <td>
+                    <a href="javascript:void(0)" onclick="navigateTo('s3')" class="flex items-center space-x-1">
+                      <span>hybrid-cloud-demo</span>
+                      <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+                    </a>
+                  </td>
+                  <td class="text-slate-500">-</td>
+                  <td class="mono text-slate-300 text-[11px]">\\sgw-hybrid-01\company-share</td>
+                  <td>
+                    <span class="status-badge-active">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                      <span>Active</span>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Direct S3 Upload (Test Scenario T4) -->
-        <div class="bg-[#0d1117] border border-[#30363d] rounded-lg p-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div class="text-xs">
-            <div class="font-semibold text-white flex items-center space-x-1.5">
-              <i data-lucide="cloud-upload" class="w-4 h-4 text-blue-400"></i>
-              <span>Direct Cloud Upload (Simulate S3-Native Creation)</span>
-            </div>
-            <div class="text-slate-400 text-[11px] mt-0.5">Upload directly into S3 bucket, then verify on Gateway via <code class="text-amber-300">RefreshCache</code> (Test T4)</div>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="simulateDirectS3Upload()" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-3 py-1.5 rounded text-xs flex items-center space-x-1.5 transition">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>Direct S3 PutObject</span>
-            </button>
-            <button onclick="triggerQuickSync()" class="bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold px-3 py-1.5 rounded text-xs flex items-center space-x-1.5 transition">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-              <span>Run RefreshCache API</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- S3 Object Explorer Table -->
-        <div class="overflow-x-auto pt-2">
-          <div class="flex items-center justify-between mb-2 text-xs">
-            <span class="text-slate-400">Objects in Bucket: <strong class="text-white" id="s3ObjectCount">12 objects (including versions)</strong></span>
+        <!-- Bottom Panel: Selected File Share Details (company-share) -->
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-white">company-share</h3>
             <div class="flex items-center space-x-2">
-              <label class="text-[11px] text-slate-400 flex items-center space-x-1 cursor-pointer">
-                <input type="checkbox" id="chkShowVersions" onchange="renderS3Objects()" class="rounded bg-[#0d1117] border-[#30363d]">
-                <span>Show All Versions & Delete Markers</span>
-              </label>
+              <button onclick="openWriteSimModal()" class="btn-aws-primary py-1 px-3 text-xs">
+                <span>Write / Sync File</span>
+              </button>
+              <button class="btn-aws-secondary py-1 px-3 text-xs">
+                <span>Edit file share</span>
+              </button>
+              <button class="btn-aws-secondary py-1 px-3 text-xs">
+                <span>Actions</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+              </button>
             </div>
           </div>
 
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-[#30363d] text-slate-400 uppercase text-[10px] tracking-wider">
-                <th class="pb-2 pl-2">Object Key</th>
-                <th class="pb-2">Version ID</th>
-                <th class="pb-2">Storage Class</th>
-                <th class="pb-2">Size</th>
-                <th class="pb-2">Encryption</th>
-                <th class="pb-2">Last Modified</th>
-                <th class="pb-2 text-right pr-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="s3ObjectsTableBody" class="divide-y divide-[#21262d]">
-              <!-- Injected by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <!-- Tabs: Details, Network access, Permissions, Metrics -->
+          <div class="flex border-b border-[#1a273b] space-x-2">
+            <button class="aws-tab active text-xs py-2">Details</button>
+            <button class="aws-tab text-xs py-2">Network access</button>
+            <button class="aws-tab text-xs py-2">Permissions</button>
+            <button class="aws-tab text-xs py-2">Metrics</button>
+          </div>
 
-      <!-- S3 Lifecycle Rules & Cost Optimization Engine -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="timer" class="w-4 h-4 text-amber-400"></i>
-              <span>S3 Lifecycle Management & Tier Transition Simulation</span>
-            </h3>
-            <p class="text-[11px] text-slate-400">Transitions aged objects to cost-effective storage tiers per Section 6.6 & 8.2</p>
-          </div>
-          <span class="bg-amber-400/10 text-amber-400 text-xs px-2.5 py-1 rounded border border-amber-400/30">
-            Lifecycle Policy: Active
-          </span>
-        </div>
-
-        <!-- Timeline Flow of Lifecycle Policy -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-bold">Day 0 - 30</div>
-            <div class="text-xs font-bold text-blue-400 mt-1">S3 Standard</div>
-            <div class="text-[11px] text-slate-400 mt-1">Hot active files cached locally on Storage Gateway</div>
-            <div class="text-[10px] mono text-slate-400 mt-2">$0.023 / GB / mo</div>
-          </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-bold">Day 30+</div>
-            <div class="text-xs font-bold text-amber-400 mt-1">S3 Standard-IA</div>
-            <div class="text-[11px] text-slate-400 mt-1">Infrequently accessed working files, rapid retrieval</div>
-            <div class="text-[10px] mono text-emerald-400 mt-2">$0.0125 / GB / mo (45% savings)</div>
-          </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-bold">Day 90+</div>
-            <div class="text-xs font-bold text-cyan-400 mt-1">S3 Glacier Flexible</div>
-            <div class="text-[11px] text-slate-400 mt-1">Archival data & historic backups (restore required)</div>
-            <div class="text-[10px] mono text-emerald-400 mt-2">$0.0036 / GB / mo (84% savings)</div>
-          </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-bold">Day 180+</div>
-            <div class="text-xs font-bold text-rose-400 mt-1">Expire Non-current</div>
-            <div class="text-[11px] text-slate-400 mt-1">Permanent deletion of stale versions & delete markers</div>
-            <div class="text-[10px] mono text-emerald-400 mt-2">100% Storage Reclaimed</div>
-          </div>
-        </div>
-
-        <div class="bg-[#0d1117] p-4 rounded-lg border border-[#30363d] flex flex-wrap items-center justify-between gap-3">
-          <div class="text-xs">
-            <span class="text-slate-300 font-semibold">Simulate 60-Day Time Skip on Storage Bucket:</span>
-            <span class="text-slate-400 block text-[11px]">Advances object age to trigger automatic transition into Standard-IA / Glacier tiers.</span>
-          </div>
-          <button onclick="simulateTimeAdvance(60)" class="bg-[#21262d] hover:bg-[#30363d] text-amber-300 border border-[#30363d] text-xs font-semibold px-4 py-2 rounded-lg flex items-center space-x-1.5 transition">
-            <i data-lucide="fast-forward" class="w-4 h-4 text-amber-400"></i>
-            <span>Simulate +60 Days Lifecycle Transition</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 3: AI SERVICES INTEGRATION (MACIE & OCR) -->
-    <!-- ========================================== -->
-    <div id="view-ai" class="tab-content hidden space-y-6">
-      
-      <!-- AI Overview Banner -->
-      <div class="aws-card rounded-xl p-5 space-y-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
-              <i data-lucide="cpu" class="w-5 h-5"></i>
-            </div>
+          <!-- Details Grid (Exact 4-column layout from Image 1) -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 text-xs pt-1">
+            
             <div>
-              <h2 class="text-sm font-bold text-white">AWS AI Cloud Practitioner Services on Synchronized Data</h2>
-              <p class="text-xs text-slate-400">Chapter 5.1 & 10.2: Amazon Macie, Amazon Textract & Amazon Rekognition processing S3 objects</p>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Protocol</span>
+              <span class="text-white font-medium">SMB</span>
             </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Status</span>
+              <span class="status-badge-active">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Active</span>
+              </span>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Access point</span>
+              <span class="text-slate-400">-</span>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Encryption</span>
+              <span class="text-white font-medium">SSE-S3</span>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">S3 bucket</span>
+              <a href="javascript:void(0)" onclick="navigateTo('s3')" class="flex items-center space-x-1 text-[#58a6ff]">
+                <span>hybrid-cloud-demo</span>
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Local path</span>
+              <span class="text-slate-200 mono">\\sgw-hybrid-01\company-share</span>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Read-only</span>
+              <span class="text-white">No</span>
+            </div>
+
+            <div>
+              <span class="text-slate-400 block text-[11px] mb-0.5">Squash</span>
+              <span class="text-white">No</span>
+            </div>
+
           </div>
-          <span class="text-xs bg-purple-500/10 text-purple-300 border border-purple-500/30 px-3 py-1 rounded">
-            AI-Ready Hybrid Storage
-          </span>
         </div>
-        <p class="text-xs text-slate-300">
-          Because AWS Storage Gateway stores synchronized on-premises files as native Amazon S3 objects (rather than proprietary opaque blobs), cloud AI services can immediately inspect, parse, and categorize corporate data without extracting or re-architecting applications.
-        </p>
+
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- ===================================================================== -->
+      <!-- VIEW 3: AMAZON S3 BUCKET (EXACT IMAGE 2 REPLICA) -->
+      <!-- ===================================================================== -->
+      <div id="view-s3" class="view-panel hidden space-y-5">
         
-        <!-- Module 1: Amazon Macie (PII & Sensitive Data Scanner) -->
-        <div class="aws-card rounded-xl p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
-              <span>Amazon Macie (Data Security & PII)</span>
-            </h3>
-            <span class="text-[10px] mono text-slate-400">ML-Powered DLP</span>
-          </div>
+        <!-- S3 Bucket Header Banner -->
+        <div class="aws-panel p-5">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3.5">
+              <!-- Green Bucket Icon -->
+              <div class="w-10 h-10 rounded-lg bg-[#0d2a1b] border border-[#1b5e39] flex items-center justify-center text-emerald-400">
+                <i data-lucide="folder-git-2" class="w-6 h-6"></i>
+              </div>
 
-          <p class="text-xs text-slate-400">
-            Scans synchronized bucket objects for confidential data (Aadhaar/SSN, Credit Cards, AWS Secrets, Private Keys) to prevent compliance leaks.
-          </p>
-
-          <div class="flex items-center space-x-2">
-            <select id="macieTargetFile" class="flex-1 bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-1.5 text-xs text-white">
-              <!-- Injected by JS with current files -->
-            </select>
-            <button onclick="runMacieScan()" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-3 py-1.5 rounded text-xs flex items-center space-x-1.5 transition">
-              <i data-lucide="scan" class="w-3.5 h-3.5"></i>
-              <span>Run Macie Scan</span>
-            </button>
-          </div>
-
-          <!-- Macie Findings Box -->
-          <div id="macieResultsBox" class="bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-xs space-y-2 min-h-36">
-            <div class="text-slate-500 text-center py-6">Select an object above and click "Run Macie Scan" to analyze sensitive data findings.</div>
-          </div>
-        </div>
-
-        <!-- Module 2: Amazon Textract (Document OCR & AI Extraction) -->
-        <div class="aws-card rounded-xl p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
-              <span>Amazon Textract (OCR & Document AI)</span>
-            </h3>
-            <span class="text-[10px] mono text-slate-400">Intelligent Parser</span>
-          </div>
-
-          <p class="text-xs text-slate-400">
-            Extracts raw text, key-value tables, and structural elements from scanned invoices, receipts, and reports uploaded through the local share.
-          </p>
-
-          <div class="flex items-center space-x-2">
-            <select id="textractTargetFile" class="flex-1 bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-1.5 text-xs text-white">
-              <!-- Injected by JS -->
-            </select>
-            <button onclick="runTextractOCR()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-3 py-1.5 rounded text-xs flex items-center space-x-1.5 transition">
-              <i data-lucide="file-search" class="w-3.5 h-3.5"></i>
-              <span>Run Textract OCR</span>
-            </button>
-          </div>
-
-          <!-- Textract Output Box -->
-          <div id="textractResultsBox" class="bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-xs space-y-2 min-h-36">
-            <div class="text-slate-500 text-center py-6">Select a document and click "Run Textract OCR" to extract structured text.</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Module 3: Amazon Rekognition (Computer Vision on Synced Images) -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-            <i data-lucide="camera" class="w-4 h-4 text-emerald-400"></i>
-            <span>Amazon Rekognition (Image Classification & Tagging)</span>
-          </h3>
-          <span class="text-[10px] mono text-slate-400">Computer Vision API</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d] flex flex-col justify-between">
-            <div class="font-semibold text-white">architecture_diagram.png</div>
-            <div class="text-[11px] text-slate-400 mt-1">Detected Labels: Diagram (99.4%), Electronics (96.2%), Flowchart (93.1%), Text (99.8%)</div>
-            <div class="mt-2 text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded w-fit">4 Labels Identified</div>
-          </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d] flex flex-col justify-between">
-            <div class="font-semibold text-white">datacenter_rack_photo.jpg</div>
-            <div class="text-[11px] text-slate-400 mt-1">Detected Labels: Server (98.9%), Computer Hardware (97.5%), Datacenter (95.0%)</div>
-            <div class="mt-2 text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded w-fit">3 Labels Identified</div>
-          </div>
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d] flex flex-col justify-between">
-            <div class="font-semibold text-white">campus_epcet_building.png</div>
-            <div class="text-[11px] text-slate-400 mt-1">Detected Labels: Architecture (99.1%), College Campus (98.3%), Building (97.7%)</div>
-            <div class="mt-2 text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded w-fit">3 Labels Identified</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 4: CLOUDWATCH & CLOUDTRAIL METRICS -->
-    <!-- ========================================== -->
-    <div id="view-cloudwatch" class="tab-content hidden space-y-6">
-      
-      <!-- CloudWatch Metrics Grid (Table 7.2 from Report) -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
-              <span>Amazon CloudWatch: Storage Gateway Operational Telemetry</span>
-            </h2>
-            <p class="text-xs text-slate-400">Chapter 7.3 Table 7.2: Real-time telemetry monitored by AWS Storage Gateway agent</p>
-          </div>
-          <span class="text-xs bg-[#21262d] border border-[#30363d] px-2.5 py-1 rounded text-slate-300 mono">
-            Interval: 1m
-          </span>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          <!-- Metric 1: CacheHitPercent -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">CacheHitPercent</div>
-            <div class="text-lg font-bold text-emerald-400 mono mt-1" id="cwCacheHit">94.8%</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Target: &gt; 90%</div>
-            <div class="w-full bg-[#161b22] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-emerald-500 h-full rounded-full" style="width: 94.8%;"></div>
-            </div>
-          </div>
-
-          <!-- Metric 2: CachePercentUsed -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">CachePercentUsed</div>
-            <div class="text-lg font-bold text-amber-400 mono mt-1" id="cwCacheUsed">43.2%</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Threshold: &lt; 85%</div>
-            <div class="w-full bg-[#161b22] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-amber-500 h-full rounded-full" style="width: 43.2%;"></div>
-            </div>
-          </div>
-
-          <!-- Metric 3: CachePercentDirty -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">CachePercentDirty</div>
-            <div class="text-lg font-bold text-blue-400 mono mt-1" id="cwCacheDirty">0.0%</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Queue Buffer: Clean</div>
-            <div class="w-full bg-[#161b22] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-blue-500 h-full rounded-full" style="width: 2%;"></div>
-            </div>
-          </div>
-
-          <!-- Metric 4: CloudBytesUploaded -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">Bytes Uploaded</div>
-            <div class="text-lg font-bold text-white mono mt-1" id="cwBytesUp">184.2 MB</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">To s3://bucket</div>
-            <div class="text-[10px] text-emerald-400 mt-1 font-mono">&uarr; 34.2 MB/s</div>
-          </div>
-
-          <!-- Metric 5: CloudBytesDownloaded -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">Bytes Downloaded</div>
-            <div class="text-lg font-bold text-white mono mt-1" id="cwBytesDown">12.4 MB</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">From s3 (on miss)</div>
-            <div class="text-[10px] text-blue-400 mt-1 font-mono">&darr; 8.1 MB/s</div>
-          </div>
-
-          <!-- Metric 6: IoWaitPercent -->
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d]">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">IoWaitPercent</div>
-            <div class="text-lg font-bold text-green-400 mono mt-1">0.42%</div>
-            <div class="text-[10px] text-slate-500 mt-0.5">Disk I/O: Optimal</div>
-            <div class="w-full bg-[#161b22] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-green-500 h-full rounded-full" style="width: 4%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CloudWatch Active Alarms -->
-        <div class="pt-2">
-          <div class="text-xs font-semibold text-slate-300 mb-2">Configured CloudWatch Alarms</div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div class="bg-[#0d1117] p-3 rounded-lg border border-emerald-500/30 flex items-center justify-between">
-              <div class="flex items-center space-x-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                <div>
-                  <div class="font-semibold text-white">CacheDirtyBacklogAlarm</div>
-                  <div class="text-[11px] text-slate-400">Alerts if CachePercentDirty &gt; 25% for 5 mins</div>
+              <div>
+                <div class="flex items-center space-x-2.5">
+                  <h1 class="text-lg font-bold text-white tracking-tight mono">hybrid-cloud-demo</h1>
+                  <span class="status-badge-active">Active</span>
+                </div>
+                <div class="text-xs text-[#94a3b8] mt-0.5">
+                  <span>Region: ap-south-1 (Mumbai)</span>
+                  <span class="mx-1.5 text-slate-600">|</span>
+                  <span>Access: Private</span>
+                  <span class="mx-1.5 text-slate-600">|</span>
+                  <span>Encryption: SSE-S3</span>
                 </div>
               </div>
-              <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono font-bold">OK (HEALTHY)</span>
             </div>
-            <div class="bg-[#0d1117] p-3 rounded-lg border border-emerald-500/30 flex items-center justify-between">
-              <div class="flex items-center space-x-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                <div>
-                  <div class="font-semibold text-white">LowCacheDiskFreeSpace</div>
-                  <div class="text-[11px] text-slate-400">Alerts if CachePercentUsed &gt; 90%</div>
-                </div>
+
+            <div class="flex items-center space-x-2">
+              <button onclick="triggerQuickSync()" class="btn-aws-secondary text-xs">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>RefreshCache</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- S3 Bucket Tabs: Objects, Properties, Permissions, Metrics, Management -->
+          <div class="flex border-b border-[#1a273b] mt-5 -mb-5 space-x-2">
+            <button class="aws-tab active">Objects</button>
+            <button class="aws-tab">Properties</button>
+            <button class="aws-tab">Permissions</button>
+            <button class="aws-tab">Metrics</button>
+            <button class="aws-tab">Management</button>
+          </div>
+        </div>
+
+        <!-- S3 Objects Card (Exact match with Image 2) -->
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                <span>Objects (4)</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Objects are the files and folders stored in this bucket, synchronised from the on-premises file share.
+              </p>
+            </div>
+
+            <!-- Action buttons: Refresh, Upload, Create folder, Actions -->
+            <div class="flex items-center space-x-2">
+              <button onclick="triggerQuickSync()" class="p-1.5 rounded bg-[#162030] border border-[#28374d] text-slate-300 hover:text-white" title="Refresh objects">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="s3RefreshSpinner"></i>
+              </button>
+              <button onclick="openDirectUploadModal()" class="btn-aws-secondary">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                <span>Upload</span>
+              </button>
+              <button onclick="openCreateFolderModal()" class="btn-aws-secondary">
+                <span>Create folder</span>
+              </button>
+              <button class="btn-aws-primary">
+                <span>Actions</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-950"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Prefix -->
+          <div class="relative w-80">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5"></i>
+            <input type="text" placeholder="Find objects by prefix" class="w-full bg-[#0b1320] border border-[#1a273b] rounded-md pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#0972d3]">
+          </div>
+
+          <!-- S3 Objects Table matching Image 2 -->
+          <div class="overflow-x-auto">
+            <table class="aws-table">
+              <thead>
+                <tr>
+                  <th class="w-8">
+                    <input type="checkbox" class="accent-[#0972d3]">
+                  </th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Size</th>
+                  <th>Last modified</th>
+                </tr>
+              </thead>
+              <tbody id="s3ExactTableBody">
+                <!-- Row 1: documents/ -->
+                <tr>
+                  <td class="text-center"><input type="checkbox" class="accent-[#0972d3]"></td>
+                  <td>
+                    <div class="flex items-center space-x-2">
+                      <i data-lucide="folder" class="w-4 h-4 text-amber-400"></i>
+                      <a href="javascript:void(0)" class="font-semibold text-white">documents/</a>
+                    </div>
+                  </td>
+                  <td class="text-slate-400">Folder</td>
+                  <td class="text-slate-500">-</td>
+                  <td class="text-slate-300">Nov 18, 2026, 10:42 (IST)</td>
+                </tr>
+
+                <!-- Row 2: Project_Report.pdf -->
+                <tr>
+                  <td class="text-center"><input type="checkbox" class="accent-[#0972d3]"></td>
+                  <td>
+                    <div class="flex items-center space-x-2">
+                      <i data-lucide="file-text" class="w-4 h-4 text-rose-400"></i>
+                      <a href="javascript:void(0)" onclick="inspectS3File('Project_Report.pdf')" class="font-semibold text-white">Project_Report.pdf</a>
+                    </div>
+                  </td>
+                  <td class="text-slate-400">PDF document</td>
+                  <td class="text-slate-300 mono">2.4 MB</td>
+                  <td class="text-slate-300">Nov 18, 2026, 10:41 (IST)</td>
+                </tr>
+
+                <!-- Row 3: Architecture_Diagram.png -->
+                <tr>
+                  <td class="text-center"><input type="checkbox" class="accent-[#0972d3]"></td>
+                  <td>
+                    <div class="flex items-center space-x-2">
+                      <i data-lucide="image" class="w-4 h-4 text-blue-400"></i>
+                      <a href="javascript:void(0)" onclick="inspectS3File('Architecture_Diagram.png')" class="font-semibold text-white">Architecture_Diagram.png</a>
+                    </div>
+                  </td>
+                  <td class="text-slate-400">PNG image</td>
+                  <td class="text-slate-300 mono">1.1 MB</td>
+                  <td class="text-slate-300">Nov 18, 2026, 10:41 (IST)</td>
+                </tr>
+
+                <!-- Row 4: Test_Results.xlsx -->
+                <tr>
+                  <td class="text-center"><input type="checkbox" class="accent-[#0972d3]"></td>
+                  <td>
+                    <div class="flex items-center space-x-2">
+                      <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+                      <a href="javascript:void(0)" onclick="inspectS3File('Test_Results.xlsx')" class="font-semibold text-white">Test_Results.xlsx</a>
+                    </div>
+                  </td>
+                  <td class="text-slate-400">Microsoft Excel</td>
+                  <td class="text-slate-300 mono">652 KB</td>
+                  <td class="text-slate-300">Nov 18, 2026, 10:42 (IST)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- VIEW 4: CLOUDWATCH METRICS & TELEMETRY -->
+      <!-- ===================================================================== -->
+      <div id="view-cloudwatch" class="view-panel hidden space-y-5">
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                <i data-lucide="gauge" class="w-5 h-5 text-emerald-400"></i>
+                <span>Amazon CloudWatch: Telemetry & Alarms</span>
+              </h2>
+              <p class="text-xs text-slate-400">Chapter 7.3: Storage Gateway metrics monitored by AWS CloudWatch</p>
+            </div>
+            <button onclick="navigateTo('overview')" class="btn-aws-secondary text-xs">Back to Gateway</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-[#0b1422] p-4 rounded border border-[#172336] space-y-2">
+              <div class="text-xs font-bold text-emerald-400 flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Alarm: HighCacheDirtyBacklog</span>
               </div>
-              <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono font-bold">OK (HEALTHY)</span>
+              <div class="text-xs text-slate-300">Status: <strong class="text-emerald-400">OK (Healthy)</strong></div>
+              <div class="text-[11px] text-slate-400">Triggers if CachePercentDirty &gt; 25% for 5 mins. Currently at 0.0%.</div>
+            </div>
+
+            <div class="bg-[#0b1422] p-4 rounded border border-[#172336] space-y-2">
+              <div class="text-xs font-bold text-emerald-400 flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Alarm: LowCacheDiskSpace</span>
+              </div>
+              <div class="text-xs text-slate-300">Status: <strong class="text-emerald-400">OK (Healthy)</strong></div>
+              <div class="text-[11px] text-slate-400">Triggers if CachePercentUsed &gt; 90%. Currently at 43.2% (150 GiB NVMe).</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- AWS CloudTrail Audit Events Table -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="file-clock" class="w-4 h-4 text-purple-400"></i>
-              <span>AWS CloudTrail: Audit Logs for Storage Gateway & S3</span>
-            </h3>
-            <p class="text-xs text-slate-400">Chapter 8.1: Complete governance and API activity tracking</p>
-          </div>
-          <span class="text-[11px] mono text-slate-400">Trail: EPCET-Capstone-AuditTrail</span>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-[#30363d] text-slate-400 uppercase text-[10px] tracking-wider">
-                <th class="pb-2 pl-2">Timestamp (UTC)</th>
-                <th class="pb-2">Event Name</th>
-                <th class="pb-2">Service Source</th>
-                <th class="pb-2">Caller Identity</th>
-                <th class="pb-2">Resource</th>
-                <th class="pb-2 text-right pr-2">Status</th>
-              </tr>
-            </thead>
-            <tbody id="cloudTrailTableBody" class="divide-y divide-[#21262d] font-mono text-[11px]">
-              <!-- Injected by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 5: TEST SCENARIOS (TABLE 7.1 VERIFICATION) -->
-    <!-- ========================================== -->
-    <div id="view-tests" class="tab-content hidden space-y-6">
-      
-      <div class="aws-card rounded-xl p-5 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h2 class="text-sm font-bold text-white flex items-center space-x-2">
-              <i data-lucide="check-check" class="w-4 h-4 text-amber-400"></i>
-              <span>Chapter 7 Table 7.1: Functional Test Scenarios Verification</span>
+      <!-- ===================================================================== -->
+      <!-- VIEW 5: AI SERVICES (MACIE & TEXTRACT OCR) -->
+      <!-- ===================================================================== -->
+      <div id="view-ai" class="view-panel hidden space-y-5">
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-white flex items-center space-x-2">
+              <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i>
+              <span>AWS AI Cloud Practitioner Services</span>
             </h2>
-            <p class="text-xs text-slate-400">Executes end-to-end test cases T1 to T8 with real-time status and expected outcomes</p>
+            <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2.5 py-1 rounded">AI-Ready Hybrid Storage</span>
           </div>
-          <button onclick="runAllTests()" class="bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold px-4 py-2 rounded-lg text-xs flex items-center space-x-1.5 transition">
-            <i data-lucide="play" class="w-4 h-4"></i>
-            <span>Run All 8 Test Scenarios</span>
-          </button>
-        </div>
 
-        <!-- Tests Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-[#30363d] text-slate-400 uppercase text-[10px] tracking-wider">
-                <th class="pb-2 pl-2">ID</th>
-                <th class="pb-2">Test Scenario</th>
-                <th class="pb-2">Expected Outcome (per AWS Docs)</th>
-                <th class="pb-2">Observed Behavior</th>
-                <th class="pb-2 text-right pr-2">Verdict</th>
-              </tr>
-            </thead>
-            <tbody id="testScenariosTableBody" class="divide-y divide-[#21262d]">
-              <!-- Injected by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Macie -->
+            <div class="bg-[#0b1422] p-4 rounded-lg border border-[#172336] space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
+                  <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
+                  <span>Amazon Macie (PII Scanner)</span>
+                </h3>
+                <span class="text-[10px] text-slate-400">ML-DLP</span>
+              </div>
+              <p class="text-xs text-slate-400">Scans files for sensitive PII (credit cards, Aadhaar, PAN, passwords).</p>
+              <button onclick="runMacieLiveDemo()" class="btn-aws-primary w-full py-1.5 text-xs">Scan S3 Objects for PII</button>
+              <div id="macieLiveResults" class="text-xs p-2 bg-[#070d17] rounded border border-[#1a273b] min-h-20 text-slate-400">Click button above to execute Macie scan.</div>
+            </div>
 
-      <!-- Test Output Console -->
-      <div class="aws-card rounded-xl p-5 space-y-2">
-        <h3 class="text-xs font-bold text-white flex items-center space-x-2">
-          <i data-lucide="terminal" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>Automated Test Execution Log</span>
-        </h3>
-        <div id="testOutputLog" class="bg-[#0b0e14] border border-[#30363d] rounded-lg p-3 font-mono text-[11px] text-slate-300 h-36 overflow-y-auto space-y-1">
-          <div class="text-slate-500">Click "Run All 8 Test Scenarios" to execute the functional test suite.</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 6: ARCHITECTURE & REPORT VIVA GUIDE -->
-    <!-- ========================================== -->
-    <div id="view-architecture" class="tab-content hidden space-y-6">
-      
-      <!-- Academic Information Card -->
-      <div class="aws-card rounded-xl p-5 border-l-4 border-amber-500 space-y-3">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <h2 class="text-base font-bold text-white">East Point College of Engineering & Technology</h2>
-            <p class="text-xs text-amber-400 font-medium">Department of Computer Science & Engineering</p>
-          </div>
-          <span class="bg-[#21262d] text-slate-300 text-xs px-3 py-1 rounded border border-[#30363d]">
-            Capstone Evaluation: 40 Marks
-          </span>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs pt-1">
-          <div><span class="text-slate-400">Student:</span> <strong class="text-white block">Satyam Kumar</strong></div>
-          <div><span class="text-slate-400">USN:</span> <strong class="text-amber-300 block mono">1EP24CS134</strong></div>
-          <div><span class="text-slate-400">Faculty Guide:</span> <strong class="text-white block">Mrs. Triveni N</strong></div>
-          <div><span class="text-slate-400">HOD:</span> <strong class="text-white block">Dr. I. Manimozhi</strong></div>
-        </div>
-      </div>
-
-      <!-- Diagrams matching Chapter 3 and Chapter 4 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Workflow Figure 3.1 -->
-        <div class="aws-card rounded-xl p-5 space-y-3">
-          <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-            <i data-lucide="workflow" class="w-4 h-4 text-[#ff9900]"></i>
-            <span>Figure 3.1: Hybrid Storage Sync Workflow</span>
-          </h3>
-          <div class="space-y-2 text-xs">
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-amber-400">1. Identify Data:</strong> On-premises file shares to be synced.
-            </div>
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-blue-400">2. Create S3 Bucket:</strong> Enable versioning, KMS encryption & IAM least-privilege role.
-            </div>
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-emerald-400">3. Deploy Gateway Appliance:</strong> ESXi / Hyper-V / KVM or Amazon EC2 instance.
-            </div>
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-purple-400">4. Activate & Allocate Cache:</strong> 150+ GiB NVMe disk for hot cache & upload buffer.
-            </div>
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-cyan-400">5. Create File Share & Mount:</strong> NFS (Linux) or SMB (Windows) with CIDR firewall.
-            </div>
-            <div class="p-2.5 bg-[#0d1117] rounded border border-[#30363d]">
-              <strong class="text-green-400">6. Auto-Sync & Monitor:</strong> Asynchronous upload over TLS 1.3, CloudWatch & S3 lifecycle.
+            <!-- Textract -->
+            <div class="bg-[#0b1422] p-4 rounded-lg border border-[#172336] space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
+                  <i data-lucide="file-search" class="w-4 h-4 text-cyan-400"></i>
+                  <span>Amazon Textract (OCR Parser)</span>
+                </h3>
+                <span class="text-[10px] text-slate-400">Document AI</span>
+              </div>
+              <p class="text-xs text-slate-400">Extracts structured key-values and tables from scanned documents.</p>
+              <button onclick="runTextractLiveDemo()" class="btn-aws-secondary w-full py-1.5 text-xs text-cyan-400">Extract Text via OCR</button>
+              <div id="textractLiveResults" class="text-xs p-2 bg-[#070d17] rounded border border-[#1a273b] min-h-20 text-slate-400">Click button above to run OCR analysis.</div>
             </div>
           </div>
         </div>
-
-        <!-- Network Ports & Security (Table 6.2 & 8.1) -->
-        <div class="aws-card rounded-xl p-5 space-y-3">
-          <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-            <i data-lucide="shield" class="w-4 h-4 text-emerald-400"></i>
-            <span>Table 6.2: Network Ports & Security Controls</span>
-          </h3>
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-[#30363d] text-slate-400 uppercase text-[10px]">
-                <th class="pb-1.5">Port</th>
-                <th class="pb-1.5">Proto</th>
-                <th class="pb-1.5">Direction</th>
-                <th class="pb-1.5">Purpose</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#21262d] font-mono text-[11px]">
-              <tr><td class="py-1 text-amber-300">443</td><td>TCP</td><td>Gateway &rarr; AWS</td><td>Encrypted HTTPS / TLS 1.3 control & sync</td></tr>
-              <tr><td class="py-1 text-amber-300">80</td><td>TCP</td><td>Browser &rarr; GW</td><td>One-time activation key generation</td></tr>
-              <tr><td class="py-1 text-amber-300">2049, 111</td><td>TCP/UDP</td><td>Client &rarr; GW</td><td>Linux Network File System (NFS)</td></tr>
-              <tr><td class="py-1 text-amber-300">445</td><td>TCP</td><td>Client &rarr; GW</td><td>Windows Server Message Block (SMB)</td></tr>
-              <tr><td class="py-1 text-amber-300">53 / 123</td><td>UDP</td><td>GW &rarr; Network</td><td>DNS resolution & NTP time sync</td></tr>
-            </tbody>
-          </table>
-
-          <div class="bg-[#0d1117] p-3 rounded-lg border border-[#30363d] text-xs space-y-1">
-            <div class="font-bold text-slate-200">Recommended Security Controls (Table 8.1):</div>
-            <ul class="list-disc list-inside text-slate-400 text-[11px] space-y-0.5">
-              <li>End-to-end TLS in transit; SSE-KMS at rest.</li>
-              <li>IAM role restricted to target bucket only (Least Privilege).</li>
-              <li>S3 Block Public Access strictly enabled on all levels.</li>
-              <li>File share client IP whitelisting via CIDR subnet masks.</li>
-            </ul>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Viva Voce Q&A Cheat Sheet (Full Marks Preparation) -->
-      <div class="aws-card rounded-xl p-5 space-y-4">
+      <!-- ===================================================================== -->
+      <!-- VIEW 6: FUNCTIONAL TEST CASES (TABLE 7.1) -->
+      <!-- ===================================================================== -->
+      <div id="view-tests" class="view-panel hidden space-y-5">
+        <div class="aws-panel p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                <i data-lucide="check-check" class="w-5 h-5 text-amber-400"></i>
+                <span>Chapter 7 Table 7.1: Functional Test Verification</span>
+              </h2>
+              <p class="text-xs text-slate-400">Verification of all 8 test scenarios per AWS documentation</p>
+            </div>
+            <button onclick="executeAllTestsLive()" class="btn-aws-primary text-xs">Run All 8 Tests</button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="aws-table">
+              <thead>
+                <tr>
+                  <th class="w-12">ID</th>
+                  <th>Test Scenario</th>
+                  <th>Expected Outcome</th>
+                  <th>Observed Status</th>
+                </tr>
+              </thead>
+              <tbody id="liveTestRows">
+                <tr><td>T1</td><td>Create file on share</td><td>Cached immediately; uploaded to S3 asynchronously</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T2</td><td>Modify file in share</td><td>New object version created in S3</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T3</td><td>Read cached file</td><td>Served from local cache (0.9ms)</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T4</td><td>Direct S3 upload + RefreshCache</td><td>Appears on file share after refresh</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T5</td><td>Delete file on share</td><td>S3 Delete Marker created; versions kept</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T6</td><td>Copy folder via SMB</td><td>Files uploaded under matching key prefixes</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T7</td><td>Mount from unauthorized IP</td><td>Mount denied per CIDR firewall</td><td><span class="status-badge-active">PASS</span></td></tr>
+                <tr><td>T8</td><td>CloudWatch & CloudTrail</td><td>Telemetry tracked; API calls logged</td><td><span class="status-badge-active">PASS</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- VIEW 7: COLLEGE REPORT & VIVA GUIDE -->
+      <!-- ===================================================================== -->
+      <div id="view-report" class="view-panel hidden space-y-5">
+        <div class="aws-panel p-5 space-y-4 border-l-4 border-amber-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white">East Point College of Engineering & Technology</h2>
+              <p class="text-xs text-amber-400 font-medium">Department of Computer Science & Engineering</p>
+            </div>
+            <span class="bg-[#132238] text-slate-300 text-xs px-3 py-1 rounded border border-[#1e3a5f]">
+              24CS562 Capstone Evaluation (40 Marks)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs bg-[#0b1422] p-3.5 rounded border border-[#172336]">
+            <div><span class="text-slate-400 block text-[11px]">Student Name:</span> <strong class="text-white text-sm">Satyam Kumar</strong></div>
+            <div><span class="text-slate-400 block text-[11px]">USN:</span> <strong class="text-amber-400 text-sm mono">1EP24CS134</strong></div>
+            <div><span class="text-slate-400 block text-[11px]">Faculty Guide:</span> <strong class="text-white">Mrs. Triveni N</strong></div>
+            <div><span class="text-slate-400 block text-[11px]">HOD:</span> <strong class="text-white">Dr. I. Manimozhi</strong></div>
+          </div>
+
+          <div class="text-xs text-slate-300 space-y-2 pt-2">
+            <h4 class="font-bold text-white text-sm">Project Title: Hybrid Cloud Storage Sync Using AWS Storage Gateway</h4>
+            <p>
+              This web application is a high-fidelity interactive simulator and operational dashboard modeled directly after the <strong>AWS Management Console (Storage Gateway & S3)</strong>. It demonstrates local NVMe caching, asynchronous TLS 1.3 sync, S3 bucket versioning, CloudWatch metrics, and AWS AI services (Macie & Textract) for the final Capstone Project evaluation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Write / Sync File Modal -->
+  <div id="writeModal" class="fixed inset-0 aws-modal-backdrop flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-[#0e1726] border border-[#1a273b] rounded-lg max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-          <i data-lucide="help-circle" class="w-4 h-4 text-purple-400"></i>
-          <span>College Viva Voce Q&A Cheat Sheet (For Evaluation & Defense)</span>
+          <i data-lucide="save" class="w-4 h-4 text-[#ff9900]"></i>
+          <span>Save File to File Share (Async S3 Sync)</span>
         </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div class="bg-[#0d1117] p-3.5 rounded-lg border border-[#30363d] space-y-1">
-            <div class="font-bold text-amber-400">Q1: What are the 4 types of AWS Storage Gateway?</div>
-            <p class="text-slate-300 text-[11px]">
-              1. <strong>S3 File Gateway</strong> (NFS/SMB to S3 objects - our project)<br>
-              2. <strong>FSx File Gateway</strong> (SMB to FSx Windows File Server)<br>
-              3. <strong>Volume Gateway</strong> (iSCSI block storage backed by EBS)<br>
-              4. <strong>Tape Gateway</strong> (Virtual Tape Library to S3 Glacier)
-            </p>
-          </div>
-
-          <div class="bg-[#0d1117] p-3.5 rounded-lg border border-[#30363d] space-y-1">
-            <div class="font-bold text-amber-400">Q2: Why are writes asynchronous and how does caching help?</div>
-            <p class="text-slate-300 text-[11px]">
-              Writes are acknowledged instantly by the local SSD cache disk (0.9ms latency), giving local users fast LAN performance. The upload buffer queues and asynchronously uploads chunks to S3 over TLS 1.3 without blocking client applications.
-            </p>
-          </div>
-
-          <div class="bg-[#0d1117] p-3.5 rounded-lg border border-[#30363d] space-y-1">
-            <div class="font-bold text-amber-400">Q3: How do direct S3 changes sync back to on-prem users?</div>
-            <p class="text-slate-300 text-[11px]">
-              Using the <code class="text-amber-300">RefreshCache</code> API call or automated EventBridge triggers. The gateway queries S3 inventory, updates its local metadata index, and presents remote changes to NFS/SMB clients.
-            </p>
-          </div>
-
-          <div class="bg-[#0d1117] p-3.5 rounded-lg border border-[#30363d] space-y-1">
-            <div class="font-bold text-amber-400">Q4: How does AI integrate into this hybrid storage model?</div>
-            <p class="text-slate-300 text-[11px]">
-              Since files are stored as plain S3 objects (not proprietary file system blocks), AWS AI services like <strong>Amazon Macie</strong> can inspect them for sensitive data leaks, <strong>Amazon Textract</strong> extracts document OCR, and <strong>Amazon Rekognition</strong> classifies images.
-            </p>
-          </div>
+        <button onclick="closeModal('writeModal')" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <form onsubmit="handleModalWrite(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">File Name</label>
+          <input type="text" id="mFileName" required placeholder="e.g. quarterly_analysis.pdf" class="w-full bg-[#070d17] border border-[#1a273b] rounded p-2 text-white mono">
         </div>
-      </div>
-
+        <div>
+          <label class="block text-slate-400 mb-1">Simulated Size</label>
+          <select id="mFileSize" class="w-full bg-[#070d17] border border-[#1a273b] rounded p-2 text-white">
+            <option value="1.8 MB">1.8 MB</option>
+            <option value="4.2 MB">4.2 MB</option>
+            <option value="12.5 MB">12.5 MB</option>
+          </select>
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('writeModal')" class="btn-aws-secondary">Cancel</button>
+          <button type="submit" class="btn-aws-primary">Write to Share</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-  </main>
-
-  <!-- Footer -->
-  <footer class="border-t border-[#30363d] bg-[#161b22] py-4 px-4 text-xs text-slate-400 mt-auto">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div>
-        <span class="text-slate-200 font-semibold">Hybrid Cloud Storage Sync Using AWS Storage Gateway</span> &bull; EPCET CSE Capstone
+  <!-- Direct S3 Upload Modal -->
+  <div id="uploadModal" class="fixed inset-0 aws-modal-backdrop flex items-center justify-center hidden z-50 p-4">
+    <div class="bg-[#0e1726] border border-[#1a273b] rounded-lg max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+          <i data-lucide="cloud-upload" class="w-4 h-4 text-[#0972d3]"></i>
+          <span>Direct Upload to s3://hybrid-cloud-demo</span>
+        </h3>
+        <button onclick="closeModal('uploadModal')" class="text-slate-400 hover:text-white">&times;</button>
       </div>
-      <div class="flex items-center space-x-3 text-[11px]">
-        <span>Academic Year: 2026-27</span>
-        <span>&bull;</span>
-        <span class="text-amber-400">Satyam Kumar (1EP24CS134)</span>
-        <span>&bull;</span>
-        <a href="https://github.com/Satyamaxxing/hybrid-cloud-storage-aws-gateway" target="_blank" class="text-blue-400 hover:underline flex items-center space-x-1">
-          <i data-lucide="github" class="w-3.5 h-3.5"></i>
-          <span>GitHub Repo</span>
-        </a>
-      </div>
+      <form onsubmit="handleDirectS3Upload(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Object Key (File Name)</label>
+          <input type="text" id="mS3Key" required placeholder="e.g. server_metrics.csv" class="w-full bg-[#070d17] border border-[#1a273b] rounded p-2 text-white mono">
+        </div>
+        <p class="text-[11px] text-slate-400">Notice: Directly uploaded S3 objects will require <strong>RefreshCache</strong> to be visible on the on-premises file share.</p>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('uploadModal')" class="btn-aws-secondary">Cancel</button>
+          <button type="submit" class="btn-aws-primary">PutObject to S3</button>
+        </div>
+      </form>
     </div>
-  </footer>
+  </div>
 
-  <!-- Application Script -->
   <script src="app.js"></script>
 </body>
 </html>
