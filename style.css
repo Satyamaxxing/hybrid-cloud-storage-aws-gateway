@@ -1,20 +1,21 @@
-/* AWS Management Console Authentic Dark Theme Stylesheet */
+/* AWS Console Pixel-Perfect Dark Stylesheet */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --aws-top-nav-bg: #0b1320;
-  --aws-sidebar-bg: #0b121e;
-  --aws-main-bg: #070d17;
-  --aws-card-bg: #0e1726;
-  --aws-card-border: #1a273b;
-  --aws-text-main: #f1f5f9;
-  --aws-text-muted: #94a3b8;
-  --aws-text-dim: #64748b;
-  --aws-blue-accent: #0972d3;
+  --top-bg: #09111e;
+  --sidebar-bg: #0b1320;
+  --main-bg: #060b14;
+  --card-bg: #0d1726;
+  --card-border: #172437;
+  --table-header-bg: #0a1322;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --aws-orange: #ec7211;
+  --aws-orange-hover: #eb5f07;
+  --aws-blue: #0972d3;
   --aws-blue-hover: #075cb0;
-  --aws-orange-action: #ff9900;
-  --aws-orange-hover: #eb8d00;
-  --aws-green-status: #22c55e;
+  --aws-green: #22c55e;
   --aws-green-bg: #092c19;
   --aws-green-border: #14532d;
 }
@@ -23,28 +24,28 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--aws-main-bg);
-  color: var(--aws-text-main);
+html, body {
+  background-color: var(--main-bg);
+  color: var(--text-main);
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-size: 13px;
-  -webkit-font-smoothing: antialiased;
 }
 
 .mono {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* AWS Custom Scrollbars */
+/* Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09101a;
+  background: #070d17;
 }
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
@@ -54,20 +55,32 @@ body {
   background: #334155;
 }
 
-/* AWS Console Top Header */
-.aws-top-bar {
-  background-color: var(--aws-top-nav-bg);
-  border-bottom: 1px solid #162235;
+/* AWS Top Global Navigation */
+.aws-header {
+  background-color: var(--top-bg);
+  border-bottom: 1px solid #142033;
   height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
 }
 
 /* AWS Sidebar */
 .aws-sidebar {
-  background-color: var(--aws-sidebar-bg);
-  border-right: 1px solid #162235;
-  width: 230px;
-  min-width: 230px;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid #142033;
+  width: 210px;
+  min-width: 210px;
   height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
 }
 
 .aws-sidebar-item {
@@ -79,36 +92,35 @@ body {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  border-left: 3px solid transparent;
   transition: all 0.15s ease;
-  user-select: none;
+  border-left: 3px solid transparent;
 }
 
 .aws-sidebar-item:hover {
-  background-color: #121c2d;
+  background-color: #111c2e;
   color: #ffffff;
 }
 
 .aws-sidebar-item.active {
-  background-color: #132238;
+  background-color: #122138;
   color: #58a6ff;
-  border-left-color: var(--aws-blue-accent);
+  border-left-color: var(--aws-blue);
   font-weight: 600;
 }
 
-.aws-sidebar-section-title {
+.aws-sidebar-heading {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: #64748b;
   padding: 16px 16px 6px 16px;
+  letter-spacing: 0.05em;
 }
 
-/* AWS Card Style */
-.aws-panel {
-  background-color: var(--aws-card-bg);
-  border: 1px solid var(--aws-card-border);
+/* AWS Cards & Panels */
+.aws-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
 }
 
@@ -124,6 +136,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .aws-tab:hover {
@@ -132,55 +145,56 @@ body {
 
 .aws-tab.active {
   color: #ffffff;
-  border-bottom-color: var(--aws-blue-accent);
+  border-bottom-color: var(--aws-blue);
 }
 
 /* AWS Buttons */
-.btn-aws-primary {
-  background-color: var(--aws-orange-action);
+.btn-orange {
+  background-color: var(--aws-orange);
   color: #0f172a;
   font-weight: 600;
   font-size: 12px;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: background 0.15s;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
+  transition: background-color 0.15s;
+  white-space: nowrap;
 }
 
-.btn-aws-primary:hover {
+.btn-orange:hover {
   background-color: var(--aws-orange-hover);
 }
 
-.btn-aws-secondary {
-  background-color: #162030;
-  border: 1px solid #28374d;
-  color: #cbd5e1;
+.btn-dark {
+  background-color: #121c2d;
+  border: 1px solid #23344d;
+  color: #e2e8f0;
   font-weight: 500;
   font-size: 12px;
   padding: 6px 14px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.15s;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
 
-.btn-aws-secondary:hover {
-  background-color: #1e2c40;
+.btn-dark:hover {
+  background-color: #1a283f;
+  border-color: #384f70;
   color: #ffffff;
 }
 
-/* AWS Running / Active Status Badge */
-.status-badge-active {
+/* Status Pill */
+.badge-active {
   background-color: var(--aws-green-bg);
-  color: var(--aws-green-status);
+  color: var(--aws-green);
   border: 1px solid var(--aws-green-border);
   font-size: 11px;
   font-weight: 600;
@@ -191,7 +205,23 @@ body {
   gap: 5px;
 }
 
-/* Table styles matching screenshot */
+/* Metrics Cards */
+.metric-box {
+  background-color: #0b1422;
+  border: 1px solid #162235;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.metric-box:hover {
+  border-color: #24354f;
+}
+
+/* Table styles */
 .aws-table {
   width: 100%;
   border-collapse: collapse;
@@ -201,47 +231,29 @@ body {
 
 .aws-table th {
   padding: 10px 14px;
-  background-color: #0c1524;
+  background-color: var(--table-header-bg);
   color: #94a3b8;
   font-weight: 600;
-  border-bottom: 1px solid var(--aws-card-border);
+  border-bottom: 1px solid var(--card-border);
+  white-space: nowrap;
 }
 
 .aws-table td {
-  padding: 11px 14px;
-  border-bottom: 1px solid #142033;
+  padding: 10px 14px;
+  border-bottom: 1px solid #131f31;
   color: #e2e8f0;
+  white-space: nowrap;
 }
 
 .aws-table tr:hover td {
-  background-color: #121d2f;
+  background-color: #101c2e;
 }
 
 .aws-table a {
   color: #58a6ff;
   text-decoration: none;
 }
+
 .aws-table a:hover {
   text-decoration: underline;
-}
-
-/* Metric Tile (Image 3) */
-.metric-tile {
-  background-color: #0b1422;
-  border: 1px solid #172336;
-  border-radius: 6px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.metric-tile:hover {
-  border-color: #24354f;
-}
-
-/* Modal backdrop */
-.aws-modal-backdrop {
-  background-color: rgba(3, 7, 18, 0.75);
-  backdrop-filter: blur(2px);
 }
